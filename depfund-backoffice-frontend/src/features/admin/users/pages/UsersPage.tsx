@@ -81,7 +81,7 @@ const Users: React.FC = () => {
                             className="btn-edit-small"
                             onClick={() => navigate(`/users/edit-role/${u.id}`, { state: { user: u } })}
                           >
-                            Editar Rol 🔑
+                            Editar Rol
                           </button>
                           
                           {/* Botón corregido: Solo quita el rol */}
@@ -91,7 +91,7 @@ const Users: React.FC = () => {
                             disabled={u.rol === 'Sin Rol'}
                             style={u.rol === 'Sin Rol' ? { opacity: 0.5, cursor: 'not-allowed' } : {}}
                           >
-                            Quitar Rol 🚫
+                            Quitar Rol
                           </button>
                         </div>
                       </td>
@@ -100,8 +100,6 @@ const Users: React.FC = () => {
                 </tbody>
               </table>
             </div>
-            
-            <Link to="/dashboard" className="btn-link-muted mt-20">Volver al Dashboard</Link>
           </div>
         </div>
       </div>

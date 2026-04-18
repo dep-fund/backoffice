@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '@shared/styles/auth.css';
-import { loginUser, saveToken } from '../services/AuthService';
-import type { ApiError } from '../../../shared/types/api.types';
+import { loginAdmin, saveToken } from '../services/AuthService';
+import type { ApiError } from '@shared/types/api.types';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError]       = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword]     = useState('');
+  const [error, setError]           = useState('');
+  const [loading, setLoading]       = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,15 +18,14 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const { access_token } = await loginUser({ username, password });
+      const { access_token } = await loginAdmin({ identifier, password });
       saveToken(access_token);
-      navigate('/users'); // redirige al panel principal
+      navigate('/users');
     } catch (err) {
       const apiError = err as ApiError;
-      // 401 → credenciales inválidas; otros → error genérico
       setError(
         apiError.status === 401
-          ? 'Usuario o contraseña incorrectos.'
+          ? 'Usuario/email o contraseña incorrectos.'
           : 'Ocurrió un error. Intentá de nuevo.',
       );
     } finally {
@@ -54,22 +53,19 @@ const LoginPage: React.FC = () => {
               <p>Introducí tus credenciales para acceder a tu panel.</p>
             </header>
 
-            {error && (
-              <div className="error-banner">
-                {error}
-              </div>
-            )}
+            {error && <div className="error-banner">{error}</div>}
 
             <form onSubmit={handleSubmit} className="auth-form">
+
               <div className="input-group">
-                <label htmlFor="username">Usuario</label>
+                <label htmlFor="identifier">Usuario o Email</label>
                 <div className="input-input-wrapper">
                   <input
                     type="text"
-                    id="username"
-                    placeholder="Tu nombre de usuario"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value.replace(/\s/g, ''))}
+                    id="identifier"
+                    placeholder="Tu usuario o correo"
+                    value={identifier}
+                    onChange={(e) => setIdentifier(e.target.value.replace(/\s/g, ''))}
                     required
                   />
                   <span className="input-highlight"></span>

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '@shared/styles/auth.css';
-import { registerUser } from '../../admin/users/services/UserService';
-import type { ApiError } from '../../../shared/types/api.types';
+import { post } from '@shared/services/httpClient';
+import type { AdminUserCreateRequest, AdminUserResponse, ApiError } from '@shared/types/api.types';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    nombre: '',
-    apellido: '',
-    usuario: '',
-    fechaNacimiento: '',
+    admin_secret_key: '',
+    username: '',
+    name: '',
+    last_name: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -21,22 +21,10 @@ const RegisterPage: React.FC = () => {
   const [error, setError]     = useState('');
   const [loading, setLoading] = useState(false);
 
-  const isOlderThan18 = (dateString: string) => {
-    if (!dateString) return false;
-    const today     = new Date();
-    const birthDate = new Date(dateString);
-    let age         = today.getFullYear() - birthDate.getFullYear();
-    const month     = today.getMonth() - birthDate.getMonth();
-    if (month < 0 || (month === 0 && today.getDate() < birthDate.getDate())) age--;
-    return age >= 18;
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const noSpaces = ['usuario', 'email', 'password', 'confirmPassword'];
-    const clean    = noSpaces.includes(name)
-      ? value.replace(/\s/g, '')
-      : value.trimStart();
+    const noSpaces = ['username', 'email', 'password', 'confirmPassword', 'admin_secret_key'];
+    const clean = noSpaces.includes(name) ? value.replace(/\s/g, '') : value.trimStart();
     setFormData({ ...formData, [name]: clean });
   };
 
@@ -44,10 +32,6 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    if (!isOlderThan18(formData.fechaNacimiento)) {
-      setError('Debés ser mayor de 18 años para registrarte.');
-      return;
-    }
     if (formData.password !== formData.confirmPassword) {
       setError('Las contraseñas no coinciden.');
       return;
@@ -59,20 +43,24 @@ const RegisterPage: React.FC = () => {
 
     setLoading(true);
     try {
-      await registerUser({
-        username:  formData.usuario,
-        name:      formData.nombre,
-        last_name: formData.apellido,
-        birthdate: formData.fechaNacimiento || null,
-        email:     formData.email,
-        password:  formData.password,
-      });
-      // Registro exitoso → al login
+      await post<AdminUserCreateRequest, AdminUserResponse>('/admin/users', {
+        admin_secret_key: formData.admin_secret_key,
+        username:         formData.username,
+        name:             formData.name,
+        last_name:        formData.last_name,
+        email:            formData.email,
+        password:         formData.password,
+      }, false); // sin auth: el secret key es la "contraseña" de acceso
+
       navigate('/login');
     } catch (err) {
       const apiError = err as ApiError;
-      if (apiError.status === 422) {
+      if (apiError.status === 401 || apiError.status === 403) {
+        setError('Clave secreta incorrecta.');
+      } else if (apiError.status === 422) {
         setError('Datos inválidos. Revisá los campos e intentá de nuevo.');
+      } else if (apiError.status === 409) {
+        setError('El usuario o email ya existe.');
       } else {
         setError('Ocurrió un error al registrarte. Intentá de nuevo.');
       }
@@ -89,27 +77,43 @@ const RegisterPage: React.FC = () => {
           <div className="dark-overlay"></div>
           <div className="visual-content">
             <img src={logoDepFund} alt="DepFund Logo" className="brand-logo-visual" />
-            <h1 className="visual-title">Comienza tu viaje deportivo hoy.</h1>
-            <p className="visual-subtitle">Sé parte de la nueva era de inversión.</p>
+            <h1 className="visual-title">Panel de Administración.</h1>
+            <p className="visual-subtitle">Registrate como administrador del sistema.</p>
           </div>
         </div>
 
         <div className="form-side">
           <div className="form-wrapper">
             <header className="auth-header">
-              <h2>Creá tu cuenta</h2>
-              <p>Uníte a DepFund y empezá a invertir.</p>
+              <h2>Crear cuenta de administrador</h2>
+              <p>Necesitás la clave secreta para registrarte.</p>
             </header>
 
             {error && <div className="error-banner">{error}</div>}
 
             <form onSubmit={handleSubmit} className="auth-form">
 
+              <div className="input-group">
+                <label htmlFor="admin_secret_key">Clave Secreta de Administrador</label>
+                <div className="input-input-wrapper">
+                  <input
+                    type="password"
+                    id="admin_secret_key"
+                    name="admin_secret_key"
+                    placeholder="••••••••••••"
+                    value={formData.admin_secret_key}
+                    onChange={handleChange}
+                    required
+                  />
+                  <span className="input-highlight"></span>
+                </div>
+              </div>
+
               {[
-                { id: 'nombre',    label: 'Nombre',    type: 'text',     placeholder: 'Tu nombre' },
-                { id: 'apellido',  label: 'Apellido',  type: 'text',     placeholder: 'Tu apellido' },
-                { id: 'usuario',   label: 'Usuario',   type: 'text',     placeholder: 'Nombre de usuario' },
-                { id: 'email',     label: 'Email',     type: 'email',    placeholder: 'correo@ejemplo.com' },
+                { id: 'name',      label: 'Nombre',   type: 'text',  placeholder: 'Tu nombre' },
+                { id: 'last_name', label: 'Apellido', type: 'text',  placeholder: 'Tu apellido' },
+                { id: 'username',  label: 'Usuario',  type: 'text',  placeholder: 'Nombre de usuario' },
+                { id: 'email',     label: 'Email',    type: 'email', placeholder: 'correo@ejemplo.com' },
               ].map(({ id, label, type, placeholder }) => (
                 <div className="input-group" key={id}>
                   <label htmlFor={id}>{label}</label>
@@ -127,21 +131,6 @@ const RegisterPage: React.FC = () => {
                   </div>
                 </div>
               ))}
-
-              <div className="input-group">
-                <label htmlFor="fechaNacimiento">Fecha de Nacimiento</label>
-                <div className="input-input-wrapper">
-                  <input
-                    type="date"
-                    id="fechaNacimiento"
-                    name="fechaNacimiento"
-                    value={formData.fechaNacimiento}
-                    onChange={handleChange}
-                    required
-                  />
-                  <span className="input-highlight"></span>
-                </div>
-              </div>
 
               {[
                 { id: 'password',        label: 'Contraseña' },
@@ -165,7 +154,7 @@ const RegisterPage: React.FC = () => {
               ))}
 
               <button type="submit" className="login-button" disabled={loading}>
-                {loading ? 'Registrando...' : 'Registrarse'}
+                {loading ? 'Registrando...' : 'Crear cuenta'}
                 {!loading && <span className="button-arrow">→</span>}
               </button>
             </form>
