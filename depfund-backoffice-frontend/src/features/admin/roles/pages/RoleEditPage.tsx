@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import './RoleEdit.css'; // ESTE NUEVO ARCHIVO
-import logoDepFund from '../img/logo_regency.jpg';
+import '@shared/styles/auth.css';
+import logoDepFund from '@shared/img/logo_regency.jpg';
 
 const RoleEdit: React.FC = () => {
   const location = useLocation();

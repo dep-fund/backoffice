@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css';
-import './RolesManager.css'; // Reutilizamos la estructura de tablas
+import '@shared/styles/auth.css';
 import logoDepFund from '../img/logo_regency.jpg';
 
 interface Permiso {

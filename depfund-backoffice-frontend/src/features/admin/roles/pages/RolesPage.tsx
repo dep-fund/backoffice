@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Login.css'; 
-import './RolesManager.css';
-import logoDepFund from '../img/logo_regency.jpg';
+import '@shared/styles/auth.css';
+import logoDepFund from '@shared/img/logo_regency.jpg';
 
 // Definimos la interfaz para usarla en ambos componentes
 export interface Role {
