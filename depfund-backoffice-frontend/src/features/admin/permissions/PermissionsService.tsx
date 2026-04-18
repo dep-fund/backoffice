@@ -49,3 +49,8 @@ export async function listRolePermissions(page = 1, pageSize = 10): Promise<Pagi
 export async function assignPermissionToRole(data: { role_id: string, permission_id: string }): Promise<void> {
   return post<{ role_id: string, permission_id: string }, void>('/admin/permission/assign-to-role', data, true);
 }
+
+export async function removePermissionFromRole(data: {role_id: string;permission_id: string;
+}): Promise<void> {
+  return del<void>('/admin/permission/assigned-permission', true, data);
+}

@@ -6,6 +6,7 @@ import {
   assignPermissionToRole, 
   listPermissions, 
   listRolePermissions, 
+  removePermissionFromRole, 
   type PermissionResponse, 
   type RolePermissionResponse 
 } from '../../permissions/PermissionsService';
@@ -81,9 +82,20 @@ const RoleEditPage: React.FC = () => {
   };
 
   const handleRemove = async (permissionId: string) => {
-    // Nota: Aquí deberías llamar a un del(`/admin/permission/role-permissions...`) si existe
     if (window.confirm("¿Seguro que deseas remover este permiso del rol?")) {
-      alert('Funcionalidad de borrado en desarrollo (requiere endpoint DELETE)');
+      try {
+        await removePermissionFromRole({
+          role_id: String(roleData.id),
+          permission_id: permissionId
+        });
+        await loadData();
+      } catch (err: any) {
+        setError(
+          err?.response?.data?.detail ||
+          err?.response?.data?.message ||
+          'No se pudo remover el permiso.'
+        );
+      }
     }
   };
 
@@ -98,14 +110,13 @@ const RoleEditPage: React.FC = () => {
           <div className="visual-content">
             <img src={logoDepFund} alt="DepFund Logo" className="brand-logo-visual" />
             <h1 className="visual-title">Privilegios</h1>
-            <p className="visual-subtitle">Editando rol: {roleData.nombre || roleData.type}</p>
           </div>
         </div>
 
         <div className="form-side side-wide">
           <div className="form-wrapper manager-wrapper" style={{ maxWidth: '850px' }}>
             <header className="auth-header">
-              <h2>Gestionar Permisos</h2>
+              <h2>Gestionar Permisos del Rol {roleData.nombre || roleData.type}</h2>
               <p>Asigna acciones de la base de datos al rol seleccionado.</p>
               {error && <p className="error-text" style={{color: 'red'}}>{error}</p>}
             </header>
@@ -165,12 +176,7 @@ const RoleEditPage: React.FC = () => {
             </form>
           </div>
 
-            <div className="button-group-row" style={{ marginTop: '30px' }}>
-                <button onClick={() => navigate('/RolePage')} className="login-button">
-                    Finalizar
-                </button>
-                <Link to="/RolePage" className="btn-link-muted">Volver</Link>
-            </div>
+            <Link to="/dashboard" className="btn-link-muted mt-20">Volver al Dashboard</Link>
           </div>
         </div>
       </div>

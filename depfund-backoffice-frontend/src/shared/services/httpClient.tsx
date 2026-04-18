@@ -93,10 +93,11 @@ export async function patch<TBody, TResponse>(
   return handleResponse<TResponse>(response);
 }
 
-export async function del<T>(path: string, auth = true): Promise<T> {
+export async function del<T>(path: string, auth = true, body?: unknown): Promise<T> {
   const response = await fetch(`${BASE_URL}${path}`, {
     method: 'DELETE',
     headers: buildHeaders(auth),
+    body: body ? JSON.stringify(body) : undefined,
   });
   return handleResponse<T>(response);
 }
