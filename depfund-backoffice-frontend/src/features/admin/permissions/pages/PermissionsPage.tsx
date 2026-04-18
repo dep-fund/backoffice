@@ -126,7 +126,7 @@ const PermiseManager: React.FC = () => {
                   <div className="input-input-wrapper">
                     <input 
                       type="text" 
-                      placeholder="Permiso (ej: admin:create:users)" 
+                      placeholder="Permiso (ej: users:create)" 
                       value={newAccion}
                       onChange={(e) => setNewAccion(e.target.value)}
                       required
