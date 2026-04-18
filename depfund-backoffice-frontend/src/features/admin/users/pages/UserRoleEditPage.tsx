@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-import '@shared/styles/auth.css';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 
 const UserRolEdit: React.FC = () => {

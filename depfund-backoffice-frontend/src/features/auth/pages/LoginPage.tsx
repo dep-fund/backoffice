@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '@shared/styles/auth.css';
 import { loginAdmin, saveToken } from '../services/AuthService';
 import type { ApiError } from '@shared/types/api.types';
 import logoDepFund from '@shared/img/logo_regency.jpg';
+import '../pages/LoginPage.css';
+import '../../dashboard/DashboardPage'
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const LoginPage: React.FC = () => {
     try {
       const { access_token } = await loginAdmin({ identifier, password });
       saveToken(access_token);
-      navigate('/users');
+      navigate('/dashboard');
     } catch (err) {
       const apiError = err as ApiError;
       setError(

@@ -32,7 +32,6 @@ function buildHeaders(includeAuth: boolean): HeadersInit {
 // Lanza un ApiError con información útil cuando el servidor responde con error
 async function handleResponse<T>(response: Response): Promise<T> {
   if (response.ok) {
-    // 204 No Content no tiene body
     if (response.status === 204) {
       return undefined as T;
     }
@@ -44,12 +43,15 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
   try {
     const body = await response.json();
-    // FastAPI devuelve { detail: [...] } en errores de validación
-    detail = body.detail;
-    message = typeof detail === 'string' ? detail : message;
-  } catch {
-    // El body no era JSON, usamos el mensaje genérico
-  }
+
+    if (body.message) {
+      message = body.message;
+    } else if (body.detail) {
+      detail = body.detail;
+      message = typeof detail === 'string' ? detail : message;
+    }
+
+  } catch {}
 
   const error: ApiError = { status: response.status, message, detail };
   throw error;

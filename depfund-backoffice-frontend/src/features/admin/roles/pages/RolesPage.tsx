@@ -1,42 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { get, post, del } from '../../../../shared/services/httpClient';
+import type { PaginatedResponse } from '../../../../shared/types/api.types';
 import '@shared/styles/auth.css';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 
-// Definimos la interfaz para usarla en ambos componentes
+// Mantenemos tu interfaz tal cual
 export interface Role {
   id: number;
   nombre: string;
   permisos: string[];
 }
 
+// Interfaz para mapear lo que viene del backend
+interface ApiRole {
+  type: string;
+}
+
 const RolesManager: React.FC = () => {
   const navigate = useNavigate();
-  const [roles, setRoles] = useState<Role[]>([
-    { id: 1, nombre: 'Administrador', permisos: ['Todos', 'Usuarios', 'Inversiones'] },
-    { id: 2, nombre: 'Inversor', permisos: ['Ver Inversiones', 'Editar Perfil'] },
-    { id: 3, nombre: 'Editor', permisos: ['Ver Usuarios', 'Publicar Noticias'] }
-  ]);
-
+  
+  // 1. Estados
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [newRoleName, setNewRoleName] = useState('');
 
-  const handleAddRole = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newRoleName.trim()) return;
-    const newRole: Role = {
-      id: Date.now(),
-      nombre: newRoleName,
-      permisos: ['Lectura']
-    };
-    setRoles([...roles, newRole]);
-    setNewRoleName('');
-  };
-
-  const handleDeleteRole = (id: number, nombre: string) => {
-    if (window.confirm(`¿Estás seguro de que deseas dar de baja el rol: ${nombre}?`)) {
-      setRoles(roles.filter(role => role.id !== id));
+  // 2. Cargar Roles desde el Backend
+  const fetchRoles = async () => {
+    try {
+      const response = await get<PaginatedResponse<ApiRole>>('/admin/role?page=1&page_size=10');
+      
+      // Mapeamos el "type" del back al "nombre" de tu estructura de visualización
+      const mappedRoles: Role[] = response.results.map((r, index) => ({
+        id: index, // El backend actual no devuelve ID numérico, usamos el index
+        nombre: r.type,
+        permisos: ['Lectura'] // O los permisos que decidas por defecto
+      }));
+      
+      setRoles(mappedRoles);
+      setError('');
+    } catch (err) {
+      setError('Error al obtener los roles del servidor.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchRoles();
+  }, []);
+
+  // 3. Dar de Alta (POST)
+  const handleAddRole = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newRoleName.trim()) return;
+
+    try {
+      await post('/admin/role', { type: newRoleName.toUpperCase() }, true);
+      setNewRoleName('');
+      fetchRoles(); // Recargar lista
+    } catch (err) {
+      setError('No se pudo crear el nuevo rol.');
+    }
+  };
+
+  // 4. Baja de Rol (DELETE)
+  const handleDeleteRole = async (nombre: string) => {
+    if (window.confirm(`¿Estás seguro de que deseas dar de baja el rol: ${nombre}?`)) {
+      try {
+        await del(`/admin/role?type=${nombre}`);
+        fetchRoles();
+      }  catch (err: any) {
+          console.log(err);
+
+          const backendMessage =
+            err?.response?.data?.message ||
+            err?.message ||
+            'Error al eliminar el rol.';
+
+          setError(backendMessage);
+        }
+    }
+  };
+
+  if (loading) return <div className="loading-screen">Cargando roles...</div>;
 
   return (
     <div className="login-page-container">
@@ -56,6 +104,9 @@ const RolesManager: React.FC = () => {
               <h2>Administración de Roles</h2>
               <p>Visualiza, crea o gestiona los permisos de la plataforma.</p>
             </header>
+
+            {/* Muestra error si existe */}
+            {error && <div className="error-box-mini" style={{color: 'red', marginBottom: '10px'}}>{error}</div>}
 
             <div className="roles-table-container">
               <table className="roles-table">
@@ -83,15 +134,15 @@ const RolesManager: React.FC = () => {
                           className="btn-edit-small"
                           onClick={() => navigate(`/roles/edit/${role.id}`, { state: { role } })}
                         >
-                          Editar ✏️
+                          Editar 
                         </button>
                       </td>
                       <td className="text-center">
                         <button 
                           className="btn-delete-small"
-                          onClick={() => handleDeleteRole(role.id, role.nombre)}
+                          onClick={() => handleDeleteRole(role.nombre)}
                         >
-                          ❌
+                          Eliminar
                         </button>
                       </td>
                     </tr>

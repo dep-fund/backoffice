@@ -15,8 +15,10 @@ import RolesPage        from './features/admin/roles/pages/RolesPage';
 import RoleEditPage     from './features/admin/roles/pages/RoleEditPage';
 
 // Admin — Permissions
-import PermissionsPage  from './features/admin/permissions/pages/PermissionEditPage';
+import PermissionsPage  from './features/admin/permissions/pages/PermissionsPage';
 import PermissionEditPage from './features/admin/permissions/pages/PermissionEditPage';
+import DashboardPage from './features/dashboard/DashboardPage';
+
 
 const App: React.FC = () => {
   return (
@@ -36,6 +38,7 @@ const App: React.FC = () => {
       <Route path="/roles/edit/:id"      element={<RoleEditPage />} />
       <Route path="/permisos"            element={<PermissionsPage />} />
       <Route path="/permisos/edit/:id"   element={<PermissionEditPage />} />
+      <Route path="/dashboard"           element={<DashboardPage />} />
     </Routes>
   );
 };
