@@ -2,9 +2,9 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import logoDepFund from '@shared/img/logo_regency.jpg';
-import Users from '../admin/users/pages/UsersPage';
-import RolesManager from '../admin/roles/pages/RolesPage';
-import PermissionsPage  from '../admin/permissions/pages/PermissionsPage';
+//import Users from '../admin/users/pages/UsersPage';
+//import RolesManager from '../admin/roles/pages/RolesPage';
+//import PermissionsPage  from '../admin/permissions/pages/PermissionsPage';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();

@@ -32,7 +32,7 @@ const Users: React.FC = () => {
         page: data.page,
         pageSize: data.page_size,
         total: data.total,
-        totalPages: data.total_pages
+        totalPages: data.total_pages ?? 0
       });
     } catch (err: any) {
       setError('Error al conectar con el servidor de administración.');

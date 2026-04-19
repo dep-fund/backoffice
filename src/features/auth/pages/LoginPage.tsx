@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginAdmin, saveToken } from '../services/AuthService';
-import type { ApiError } from '@shared/types/api.types';
+import type { ApiError } from '../../../shared/types/api.types';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 import '../pages/LoginPage.css';
 import '../../dashboard/DashboardPage'

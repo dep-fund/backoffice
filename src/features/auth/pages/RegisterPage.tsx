@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '@shared/styles/auth.css';
-import { post } from '@shared/services/httpClient';
-import type { AdminUserCreateRequest, AdminUserResponse, ApiError } from '@shared/types/api.types';
+import { post } from '../../../shared/services/httpClient';
+import type { AdminUserCreateRequest, AdminUserResponse, ApiError } from '../../../shared/types/api.types';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 
 const RegisterPage: React.FC = () => {

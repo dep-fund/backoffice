@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import '@shared/styles/auth.css';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 import { 
@@ -13,7 +13,6 @@ import {
 
 const RoleEditPage: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   
   // roleData viene de la tabla de Roles (trae id, nombre/type)
   const roleData = location.state?.role;
