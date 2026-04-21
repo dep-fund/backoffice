@@ -1,0 +1,241 @@
+:root {
+    --primary-orange: #f19204;
+    --dark-navy: #0d1b2a;
+    --text-main: #1a1a1a;
+    --text-muted: #667085;
+    --white: #ffffff;
+    --bg-soft: #f6f7fb;
+    --border: #e4e7eb;
+    --danger: #ef4444;
+  }
+  
+  /* =========================
+     RESET BASE
+  ========================= */
+  .pe-container * {
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* =========================
+     LAYOUT GENERAL
+  ========================= */
+  .pe-container {
+    min-height: 100vh;
+    display: flex;
+    background: var(--bg-soft);
+  }
+  
+  .pe-columns {
+    display: flex;
+    width: 100%;
+  }
+  
+  /* =========================
+     SIDEBAR VISUAL
+  ========================= */
+  .pe-visual-side {
+    flex: 0.9;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('https://images.unsplash.com/photo-1504450758481-7338eba7524a?q=80&w=2000&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+  }
+  
+  .pe-dark-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(13, 27, 42, 0.95),
+      rgba(13, 27, 42, 0.7)
+    );
+  }
+  
+  .pe-visual-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+  }
+  
+  .pe-logo {
+    width: 110px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  }
+  
+  .pe-visual-title {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 6px;
+    line-height: 1.3;
+    padding-bottom: 4px;
+    background: linear-gradient(180deg, #f19204, #f5c542, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .pe-visual-subtitle {
+    font-size: 0.85rem;
+    opacity: 0.85;
+  }
+  
+  /* =========================
+     PANEL PRINCIPAL
+  ========================= */
+  .pe-form-side {
+    flex: 2.2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  
+  .pe-wrapper {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  }
+  
+  /* =========================
+     HEADER
+  ========================= */
+  .pe-header {
+    margin-bottom: 20px;
+  }
+  
+  .pe-header h2 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--dark-navy);
+  }
+  
+  .pe-header p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+  
+  /* =========================
+     FORM
+  ========================= */
+  .pe-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .pe-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .pe-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+  
+  .pe-input {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    background: #f9fafb;
+    color: var(--text-main);
+    transition: 0.2s ease;
+  }
+  
+  .pe-input:focus {
+    outline: none;
+    border-color: var(--primary-orange);
+    background: var(--white);
+    box-shadow: 0 0 0 3px rgba(241,146,4,0.12);
+  }
+  
+  /* =========================
+     FOOTER
+  ========================= */
+  .pe-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+  
+  .pe-submit-btn {
+    width: 100%;
+    background: linear-gradient(180deg, var(--primary-orange), #d98303);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .pe-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(241,146,4,0.3);
+  }
+  
+  .pe-back-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: #f9fafb;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
+    text-align: center;
+  }
+  
+  .pe-back-btn:hover {
+    background: var(--dark-navy);
+    color: var(--white);
+    border-color: var(--dark-navy);
+  }
+  
+  /* =========================
+     LOADING
+  ========================= */
+  .pe-loading-screen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  
+  /* =========================
+     RESPONSIVE
+  ========================= */
+  @media (max-width: 900px) {
+    .pe-visual-side {
+      display: none;
+    }
+  
+    .pe-wrapper {
+      max-width: 100%;
+    }
+  }

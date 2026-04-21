@@ -65,3 +65,11 @@ export async function listUsers(
 export async function getAdminMe(): Promise<AdminUserResponse> {
   return get<AdminUserResponse>('/admin/users/me');
 }
+
+// Obtener usuario por ID (ADMIN)
+// GET /admin/users/{id}
+//export async function getUserById(
+//  id: string,
+//): Promise<StandardUserResponse> {
+//  return get<StandardUserResponse>(`/admin/users/${id}`);
+//}
