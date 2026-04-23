@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import type { StandardUserResponse } from '../../../../shared/types/api.types';
 import logoDepFund from '@shared/img/logo_regency.jpg';
-import { listUsers } from '../services/UserService';
+import { listUsers, toggleUserBlock } from '../services/UserService';
 import './UsersPage.css';
 
 const Users: React.FC = () => {
@@ -52,11 +52,16 @@ const Users: React.FC = () => {
     setBlockModal({ visible: true, userId: id, username, isBlocked });
   };
 
-  const confirmBlockUser = () => {
+  const confirmBlockUser = async () => {
     if (!blockModal) return;
-    console.log("Bloqueando usuario:", blockModal.userId);
-    // await patchUser(blockModal.userId, { blocked: !blockModal.isBlocked });
-    setBlockModal(null);
+    try {
+      const updated = await toggleUserBlock(blockModal.userId);
+      setUsers(prev => prev.map(u => u.id === updated.id ? updated : u));
+    } catch {
+      setError('Error al cambiar el estado del usuario.');
+    } finally {
+      setBlockModal(null);
+    }
   };
 
   if (loading && pagination.page === 1) {

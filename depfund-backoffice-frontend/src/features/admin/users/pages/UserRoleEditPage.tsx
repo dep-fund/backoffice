@@ -1,22 +1,19 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import logoDepFund from '@shared/img/logo_regency.jpg';
+import type { StandardUserResponse } from '../../../../shared/types/api.types';
 import './UserRoleEditPage.css';
 
 const UserRoleEditPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const userData = location.state?.user as StandardUserResponse;
 
-  // MOCK temporal para evitar pantalla vacía
-  const userData = {
-    name: 'Pendiente',
-    last_name: 'de implementación',
-    username: 'user_test',
-    birthdate: null,
-    email: 'pendiente@backend.com',
-    role: 'N/A',
-    blocked: false,
-  };
+  if (!userData) {
+    navigate('/users');
+    return null;
+  }
 
   return (
     <div className="ure-container">
@@ -43,14 +40,6 @@ const UserRoleEditPage: React.FC = () => {
               <p>Vista de solo lectura del perfil seleccionado.</p>
             </header>
 
-            {/* MENSAJE PRINCIPAL */}
-            <div className="ure-error-box" style={{ marginBottom: '15px' }}>
-              ⚠️ Esta pantalla aún no está conectada al backend.  
-              <br />
-              Tarea pendiente: implementar GET /admin/users/{'{id}'}
-            </div>
-
-            {/* UI intacta */}
             <div className="ure-grid">
 
               <div className="ure-field">
@@ -76,16 +65,14 @@ const UserRoleEditPage: React.FC = () => {
               </div>
 
               <div className="ure-field ure-full">
-                <label className="ure-label">Rol</label>
-                <div className="ure-value">
-                  <span className="ure-role-tag">{userData.role}</span>
-                </div>
+                <label className="ure-label">Fecha de nacimiento</label>
+                <div className="ure-value">{userData.birthdate ?? '—'}</div>
               </div>
 
               <div className="ure-field ure-full">
                 <label className="ure-label">Estado</label>
                 <div className="ure-value">
-                  <span className={`ure-status-tag`}>
+                  <span className={`ure-status-tag ${userData.blocked ? 'ure-status-blocked' : 'ure-status-active'}`}>
                     {userData.blocked ? 'Bloqueado' : 'Activo'}
                   </span>
                 </div>
