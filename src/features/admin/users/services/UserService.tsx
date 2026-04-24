@@ -65,3 +65,19 @@ export async function listUsers(
 export async function getAdminMe(): Promise<AdminUserResponse> {
   return get<AdminUserResponse>('/admin/users/me');
 }
+
+// Bloquear/desbloquear usuario → PATCH /admin/users/users/{id}/block
+export async function toggleUserBlock(userId: string): Promise<StandardUserResponse> {
+  return patch<undefined, StandardUserResponse>(
+    `/admin/users/users/${userId}/block`,
+    undefined,
+  );
+}
+
+// Obtener usuario por ID (ADMIN)
+// GET /admin/users/{id}
+//export async function getUserById(
+//  id: string,
+//): Promise<StandardUserResponse> {
+//  return get<StandardUserResponse>(`/admin/users/${id}`);
+//}

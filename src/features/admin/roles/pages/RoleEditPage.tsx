@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD:src/features/admin/roles/pages/RoleEditPage.tsx
 import { useLocation, Link } from 'react-router-dom';
 import '@shared/styles/auth.css';
+=======
+import { useLocation, useNavigate, Link } from 'react-router-dom';
+>>>>>>> arreglando-front:depfund-backoffice-frontend/src/features/admin/roles/pages/RoleEditPage.tsx
 import logoDepFund from '@shared/img/logo_regency.jpg';
 import { 
   assignPermissionToRole, 
@@ -10,13 +14,12 @@ import {
   type PermissionResponse, 
   type RolePermissionResponse 
 } from '../../permissions/PermissionsService';
+import './RoleEditPage.css';
 
 const RoleEditPage: React.FC = () => {
   const location = useLocation();
   
-  // roleData viene de la tabla de Roles (trae id, nombre/type)
   const roleData = location.state?.role;
-  console.log("ROLE DATA:", roleData);
 
   const [allPermissions, setAllPermissions] = useState<PermissionResponse[]>([]);
   const [currentRolePermissions, setCurrentRolePermissions] = useState<RolePermissionResponse[]>([]);
@@ -24,24 +27,27 @@ const RoleEditPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const [removeModal, setRemoveModal] = useState<{
+    visible: boolean;
+    permissionId: string;
+    permissionName: string;
+  } | null>(null);
+
   const loadData = async () => {
     if (!roleData) return;
     setLoading(true);
     try {
-      // 1. Recuperamos TODOS los permisos globales y la matriz de asignaciones
       const [respAll, respMatrix] = await Promise.all([
         listPermissions(1, 100),
         listRolePermissions(1, 100)
       ]);
 
       setAllPermissions(respAll.results);
-      
-      // 2. Filtramos la matriz para mostrar solo los permisos ACTIVOS de este ROL
-      // Usamos los campos 'role' o 'role_id' según lo que devuelve tu backend
+
       const filtered = respMatrix.results.filter(
         rp => rp.role_id === roleData.id || rp.role === roleData.nombre || rp.role === roleData.type
       );
-      
+
       setCurrentRolePermissions(filtered);
       setError('');
     } catch (err: any) {
@@ -60,18 +66,13 @@ const RoleEditPage: React.FC = () => {
     if (!selectedPermissionId) return;
 
     try {
-      // Enviamos la vinculación a la base de datos
-      console.log("ROLE ID " + roleData.id)
-      console.log("SELECTED PERMISSION ID "+ selectedPermissionId)
       await assignPermissionToRole({
         role_id: String(roleData.id),
         permission_id: String(selectedPermissionId)
       });
-      
       setSelectedPermissionId('');
-      await loadData()
+      await loadData();
     } catch (err: any) {
-      console.log("ASSIGN ERROR:", err?.response?.data || err);
       setError(
         err?.response?.data?.detail ||
         err?.response?.data?.message ||
@@ -80,102 +81,135 @@ const RoleEditPage: React.FC = () => {
     }
   };
 
-  const handleRemove = async (permissionId: string) => {
-    if (window.confirm("¿Seguro que deseas remover este permiso del rol?")) {
-      try {
-        await removePermissionFromRole({
-          role_id: String(roleData.id),
-          permission_id: permissionId
-        });
-        await loadData();
-      } catch (err: any) {
-        setError(
-          err?.response?.data?.detail ||
-          err?.response?.data?.message ||
-          'No se pudo remover el permiso.'
-        );
-      }
+  const handleRemove = (permissionId: string, permissionName: string) => {
+    setRemoveModal({ visible: true, permissionId, permissionName });
+  };
+
+  const confirmRemove = async () => {
+    if (!removeModal) return;
+    try {
+      await removePermissionFromRole({
+        role_id: String(roleData.id),
+        permission_id: removeModal.permissionId
+      });
+      await loadData();
+    } catch (err: any) {
+      setError(
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        'No se pudo remover el permiso.'
+      );
+    } finally {
+      setRemoveModal(null);
     }
   };
 
-  if (!roleData) return <div className="login-page-container">Error: Rol no especificado.</div>;
-  if (loading) return <div className="loading-screen">Cargando privilegios...</div>;
+  if (!roleData) return <div className="rep-container">Error: Rol no especificado.</div>;
+  if (loading) return <div className="rep-loading-screen">Cargando privilegios...</div>;
 
   return (
-    <div className="login-page-container">
-      <div className="login-columns">
-        <div className="visual-side side-narrow">
-          <div className="dark-overlay"></div>
-          <div className="visual-content">
-            <img src={logoDepFund} alt="DepFund Logo" className="brand-logo-visual" />
-            <h1 className="visual-title">Privilegios</h1>
+    <div className="rep-container">
+
+      {/* MODAL REMOVER PERMISO */}
+      {removeModal?.visible && (
+        <div className="rep-modal-backdrop">
+          <div className="rep-modal">
+            <div className="rep-modal-icon rep-modal-icon--warning">⚠</div>
+            <h3 className="rep-modal-title">¿Remover permiso?</h3>
+            <p className="rep-modal-text">
+              Estás por quitar el permiso <strong>{removeModal.permissionName}</strong> de este rol. Podés volver a asignarlo cuando quieras.
+            </p>
+            <div className="rep-modal-buttons">
+              <button className="rep-modal-btn-cancel" onClick={() => setRemoveModal(null)}>
+                Cancelar
+              </button>
+              <button className="rep-modal-btn-confirm" onClick={confirmRemove}>
+                Sí, remover
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className="rep-columns">
+
+        {/* LEFT */}
+        <div className="rep-visual-side">
+          <div className="rep-dark-overlay"></div>
+          <div className="rep-visual-content">
+            <img src={logoDepFund} alt="DepFund Logo" className="rep-logo" />
+            <h1 className="rep-visual-title">Privilegios</h1>
           </div>
         </div>
 
-        <div className="form-side side-wide">
-          <div className="form-wrapper manager-wrapper" style={{ maxWidth: '850px' }}>
-            <header className="auth-header">
+        {/* RIGHT */}
+        <div className="rep-form-side">
+          <div className="rep-wrapper">
+
+            <header className="rep-header">
               <h2>Gestionar Permisos del Rol {roleData.nombre || roleData.type}</h2>
               <p>Asigna acciones de la base de datos al rol seleccionado.</p>
-              {error && <p className="error-text" style={{color: 'red'}}>{error}</p>}
+              {error && <div className="rep-error-box">{error}</div>}
             </header>
 
-            <div className="current-permissions-box">
-              <h3>Permisos Activos en DB</h3>
-              <div className="permissions-grid-edit">
+            <div className="rep-current-permissions">
+              <h3 className="rep-section-title">Permisos Activos en DB</h3>
+              <div className="rep-permissions-grid">
                 {currentRolePermissions.length > 0 ? (
                   currentRolePermissions.map((rp, idx) => (
-                    <div key={idx} className="tag-edit">
-                      {/* IMPORTANTE: Usamos 'permission' que es el campo string de tu interfaz */}
-                      {rp.permission} 
-                      <button type="button" onClick={() => handleRemove(rp.permission_id)}>×</button>
+                    <div key={idx} className="rep-permission-tag">
+                      {rp.permission}
+                      <button
+                        type="button"
+                        className="rep-tag-remove"
+                        onClick={() => handleRemove(rp.permission_id, rp.permission)}
+                      >
+                        ×
+                      </button>
                     </div>
                   ))
                 ) : (
-                  <p className="empty-msg">No hay permisos asignados a este rol.</p>
+                  <p className="rep-empty-msg">No hay permisos asignados a este rol.</p>
                 )}
               </div>
             </div>
 
-           <div className="add-permission-section">
-            <div className="divider"></div>
-            <h3>Vincular Nuevo Permiso</h3>
+            <div className="rep-add-section">
+              <div className="rep-divider"></div>
+              <h3 className="rep-section-title">Vincular Nuevo Permiso</h3>
+              <form onSubmit={handleAddPermission} className="rep-add-form">
+                <div className="rep-select-group">
+                  <select
+                    className="rep-select"
+                    value={selectedPermissionId}
+                    onChange={(e) => setSelectedPermissionId(e.target.value)}
+                    required
+                  >
+                    <option value="">Selecciona una acción...</option>
+                    {allPermissions.map((p) => {
+                      const yaAsignado = currentRolePermissions.some(
+                        (cp) => cp.permission_id === p.id
+                      );
+                      return (
+                        <option key={p.id} value={p.id} disabled={yaAsignado}>
+                          {p.type} {yaAsignado ? "(Ya asignado)" : ""}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <button type="submit" className="rep-submit-btn">
+                  Asignar
+                </button>
+              </form>
+            </div>
 
-            <form onSubmit={handleAddPermission} className="add-role-form">
-              <div className="input-group">
-                <select
-                  className="custom-select"
-                  value={selectedPermissionId}
-                  onChange={(e) => setSelectedPermissionId(e.target.value)}
-                  required
-                >
-                  <option value="">Selecciona una acción...</option>
+            <div className="rep-footer">
+              <Link to="/dashboard" className="rep-back-btn">
+                ← Volver al Dashboard
+              </Link>
+            </div>
 
-                  {allPermissions.map((p) => {
-                    const yaAsignado = currentRolePermissions.some(
-                      (cp) => cp.permission_id === p.id
-                    );
-
-                    return (
-                      <option
-                        key={p.id}
-                        value={p.id}
-                        disabled={yaAsignado}
-                      >
-                        {p.type} {yaAsignado ? "(Ya asignado)" : ""}
-                      </option>
-                    );
-                  })}
-                </select>
-              </div>
-
-              <button type="submit" className="login-button add-btn">
-                Asignar
-              </button>
-            </form>
-          </div>
-
-            <Link to="/dashboard" className="btn-link-muted mt-20">Volver al Dashboard</Link>
           </div>
         </div>
       </div>

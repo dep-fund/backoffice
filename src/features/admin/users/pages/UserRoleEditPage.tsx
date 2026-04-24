@@ -1,95 +1,98 @@
-import React, { useState } from 'react';
-import { useLocation, useNavigate, Link } from 'react-router-dom';
+import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logoDepFund from '@shared/img/logo_regency.jpg';
+import type { StandardUserResponse } from '../../../../shared/types/api.types';
+import './UserRoleEditPage.css';
 
-const UserRolEdit: React.FC = () => {
-  const location = useLocation();
+const UserRoleEditPage: React.FC = () => {
   const navigate = useNavigate();
-  const userData = location.state?.user;
+  const location = useLocation();
+  const userData = location.state?.user as StandardUserResponse;
 
-  // Roles disponibles para el selector
-  const [rolesExistentes] = useState(['Administrador', 'Inversor', 'Editor', 'Auditor']);
-  const [selectedRol, setSelectedRol] = useState(userData?.rol || '');
-
-  if (!userData) return <div className="login-page-container">Error: Usuario no encontrado.</div>;
-
-  const handleUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`Rol de ${userData.usuario} actualizado a: ${selectedRol}`);
+  if (!userData) {
     navigate('/users');
-  };
+    return null;
+  }
 
   return (
-    <div className="login-page-container">
-      <div className="login-columns">
-        <div className="visual-side side-narrow">
-          <div className="dark-overlay"></div>
-          <div className="visual-content">
-            <img src={logoDepFund} alt="DepFund Logo" className="brand-logo-visual" />
-            <h1 className="visual-title">Asignar Rol</h1>
-            <p className="visual-subtitle">Modifica los privilegios de @{userData.usuario}.</p>
+    <div className="ure-container">
+      <div className="ure-columns">
+
+        {/* LEFT */}
+        <div className="ure-visual-side">
+          <div className="ure-dark-overlay"></div>
+          <div className="ure-visual-content">
+            <img src={logoDepFund} alt="DepFund Logo" className="ure-logo" />
+            <h1 className="ure-visual-title">Detalle de Usuario</h1>
+            <p className="ure-visual-subtitle">
+              Información completa del perfil.
+            </p>
           </div>
         </div>
 
-        <div className="form-side side-wide">
-          <div className="form-wrapper manager-wrapper">
-            <header className="auth-header">
-              <h2>Cambiar Rol de Usuario</h2>
-              <p>Los datos personales no son modificables desde esta vista.</p>
+        {/* RIGHT */}
+        <div className="ure-form-side">
+          <div className="ure-wrapper">
+
+            <header className="ure-header">
+              <h2>Información de Usuario</h2>
+              <p>Vista de solo lectura del perfil seleccionado.</p>
             </header>
 
-            <form onSubmit={handleUpdate} className="auth-form profile-grid">
-              <div className="input-group">
-                <label>Usuario</label>
-                <div className="input-input-wrapper">
-                  <input type="text" value={`@${userData.usuario}`} readOnly className="read-only-input" />
+            <div className="ure-grid">
+
+              <div className="ure-field">
+                <label className="ure-label">Nombre</label>
+                <div className="ure-value">{userData.name}</div>
+              </div>
+
+              <div className="ure-field">
+                <label className="ure-label">Apellido</label>
+                <div className="ure-value">{userData.last_name}</div>
+              </div>
+
+              <div className="ure-field">
+                <label className="ure-label">Usuario</label>
+                <div className="ure-value ure-value--highlight">
+                  @{userData.username}
                 </div>
               </div>
 
-              <div className="input-group">
-                <label>Nombre</label>
-                <div className="input-input-wrapper">
-                  <input type="text" value={userData.nombre} readOnly className="read-only-input" />
+              <div className="ure-field ure-full">
+                <label className="ure-label">Email</label>
+                <div className="ure-value">{userData.email}</div>
+              </div>
+
+              <div className="ure-field ure-full">
+                <label className="ure-label">Fecha de nacimiento</label>
+                <div className="ure-value">{userData.birthdate ?? '—'}</div>
+              </div>
+
+              <div className="ure-field ure-full">
+                <label className="ure-label">Estado</label>
+                <div className="ure-value">
+                  <span className={`ure-status-tag ${userData.blocked ? 'ure-status-blocked' : 'ure-status-active'}`}>
+                    {userData.blocked ? 'Bloqueado' : 'Activo'}
+                  </span>
                 </div>
               </div>
 
-              <div className="input-group">
-                <label>Apellido</label>
-                <div className="input-input-wrapper">
-                  <input type="text" value={userData.apellido} readOnly className="read-only-input" />
-                </div>
-              </div>
+            </div>
 
-              <div className="input-group">
-                <label>Email</label>
-                <div className="input-input-wrapper">
-                  <input type="text" value={userData.email} readOnly className="read-only-input" />
-                </div>
-              </div>
+            <div className="ure-footer">
+              <button
+                className="ure-back-btn"
+                onClick={() => navigate(-1)}
+              >
+                ← Volver
+              </button>
 
-              <div className="input-group full-width">
-                <label style={{ color: 'var(--primary-orange)', fontWeight: '800' }}>Seleccionar Nuevo Rol</label>
-                <div className="input-input-wrapper">
-                  <select 
-                    className="custom-select"
-                    value={selectedRol}
-                    onChange={(e) => setSelectedRol(e.target.value)}
-                    required
-                  >
-                    {rolesExistentes.map((rol, idx) => (
-                      <option key={idx} value={rol}>{rol}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+              <Link to="/users" className="ure-users-btn">
+                Ver todos los usuarios
+              </Link>
+            </div>
 
-              <div className="button-group-row full-width">
-                <button type="submit" className="login-button">
-                  Guardar Nuevo Rol
-                </button>
-                <Link to="/users" className="btn-link-muted">Cancelar</Link>
-              </div>
-            </form>
           </div>
         </div>
       </div>
@@ -97,4 +100,4 @@ const UserRolEdit: React.FC = () => {
   );
 };
 
-export default UserRolEdit;
+export default UserRoleEditPage;

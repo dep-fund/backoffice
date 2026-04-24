@@ -1,58 +1,69 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
-
 import logoDepFund from '@shared/img/logo_regency.jpg';
+import './PermissionEditPage.css';
 
 const PermiseEdit: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const data = location.state?.permiso;
 
-  const [accion, setAccion] = useState(data?.accion || '');
+  const [accion, setAccion] = useState(data?.type || data?.accion || '');
 
-  if (!data) return <div className="login-page-container">Error: Permiso no encontrado.</div>;
+  if (!data) return <div className="pe-container">Error: Permiso no encontrado.</div>;
 
   const handleUpdate = (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Acción actualizada para ${data.usuario}: ${accion}`);
+    alert(`Acción actualizada: ${accion}`);
     navigate('/permisos');
   };
 
   return (
-    <div className="login-page-container">
-      <div className="login-columns">
-        <div className="visual-side side-narrow">
-          <div className="dark-overlay"></div>
-          <div className="visual-content">
-            <img src={logoDepFund} alt="DepFund Logo" className="brand-logo-visual" />
-            <h1 className="visual-title">Editar Permiso</h1>
+    <div className="pe-container">
+      <div className="pe-columns">
+
+        {/* LEFT */}
+        <div className="pe-visual-side">
+          <div className="pe-dark-overlay"></div>
+          <div className="pe-visual-content">
+            <img src={logoDepFund} alt="DepFund Logo" className="pe-logo" />
+            <h1 className="pe-visual-title">Editar Permiso</h1>
+            <p className="pe-visual-subtitle">Modificá el identificador de la acción.</p>
           </div>
         </div>
 
-        <div className="form-side side-wide">
-          <div className="form-wrapper manager-wrapper">
-            <header className="auth-header">
-              <h2>Editar Permisos</h2>
+        {/* RIGHT */}
+        <div className="pe-form-side">
+          <div className="pe-wrapper">
+
+            <header className="pe-header">
+              <h2>Editar Permiso</h2>
+              <p>Modificá el nombre del permiso del sistema.</p>
             </header>
 
-            <form onSubmit={handleUpdate} className="auth-form">
+            <form onSubmit={handleUpdate} className="pe-form">
 
-              <div className="input-group">
-                <div className="input-input-wrapper">
-                  <input 
-                    type="text" 
-                    value={accion} 
-                    onChange={(e) => setAccion(e.target.value)}
-                    required
-                  />
-                  <span className="input-highlight"></span>
-                </div>
+              <div className="pe-field">
+                <label className="pe-label">Identificador del permiso</label>
+                <input
+                  className="pe-input"
+                  type="text"
+                  value={accion}
+                  onChange={(e) => setAccion(e.target.value)}
+                  placeholder="ej: users:create"
+                  required
+                />
               </div>
 
-              <div className="button-group-row">
-                <button type="submit" className="login-button">Actualizar Permiso</button>
-                <Link to="/permisos" className="btn-link-muted">Cancelar</Link>
+              <div className="pe-footer">
+                <button type="submit" className="pe-submit-btn">
+                  Actualizar Permiso
+                </button>
+                <Link to="/permisos" className="pe-back-btn">
+                  Cancelar
+                </Link>
               </div>
+
             </form>
           </div>
         </div>
