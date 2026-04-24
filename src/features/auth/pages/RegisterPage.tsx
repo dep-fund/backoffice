@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-<<<<<<< HEAD:src/features/auth/pages/RegisterPage.tsx
-import '@shared/styles/auth.css';
 import { post } from '../../../shared/services/httpClient';
 import type { AdminUserCreateRequest, AdminUserResponse, ApiError } from '../../../shared/types/api.types';
-import logoDepFund from '../../../shared/img/logo_regency.jpg';
-=======
-import { post } from '@shared/services/httpClient';
-import type { AdminUserCreateRequest, AdminUserResponse, ApiError } from '@shared/types/api.types';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 import './RegisterPage.css';
->>>>>>> arreglando-front:depfund-backoffice-frontend/src/features/auth/pages/RegisterPage.tsx
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();

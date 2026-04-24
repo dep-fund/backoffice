@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react';
-<<<<<<< HEAD:src/features/admin/roles/pages/RoleEditPage.tsx
 import { useLocation, Link } from 'react-router-dom';
-import '@shared/styles/auth.css';
-=======
-import { useLocation, useNavigate, Link } from 'react-router-dom';
->>>>>>> arreglando-front:depfund-backoffice-frontend/src/features/admin/roles/pages/RoleEditPage.tsx
 import logoDepFund from '@shared/img/logo_regency.jpg';
 import { 
   assignPermissionToRole, 
