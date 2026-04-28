@@ -14,6 +14,15 @@ export interface TokenResponse {
   token_type: string; // "Bearer"
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  token: string;
+  new_password: string;
+}
+
 // ----- Standard User -----
 
 export interface StandardUserRegisterRequest {
