@@ -1,54 +1,28 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { forgotPassword } from '../services/AuthService';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 import './ForgotPasswordPage.css';
 
 const ForgotPassword: React.FC = () => {
-  const [step, setStep] = useState(1);
-
-  const [formData, setFormData] = useState({
-    email: '',
-    code: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
-
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    let cleanValue = value;
-    if (cleanValue.startsWith(' ')) cleanValue = cleanValue.trimStart();
-    cleanValue = cleanValue.replace(/\s/g, '');
-
-    setFormData({ ...formData, [name]: cleanValue });
-  };
-
-  const handleSendCode = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    console.log('Enviando código a:', formData.email);
-    setStep(2);
-  };
+    setLoading(true);
 
-  const handleResetPassword = (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-
-    if (formData.newPassword !== formData.confirmPassword) {
-      setError('Las contraseñas no coinciden.');
-      return;
+    try {
+      await forgotPassword({ email });
+      setSuccess(true);
+    } catch (err: any) {
+      setError(err.message || 'Ocurrió un error al enviar el correo de recuperación.');
+    } finally {
+      setLoading(false);
     }
-
-    if (formData.newPassword.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres.');
-      return;
-    }
-
-    console.log('Restableciendo con código:', formData.code);
-    setSuccess(true);
   };
 
   return (
@@ -77,11 +51,10 @@ const ForgotPassword: React.FC = () => {
           <div className="fp-form-wrapper">
 
             <header className="fp-auth-header">
-              <h2>
-                {step === 1
-                  ? '¿Olvidaste tu contraseña?'
-                  : 'Restablecer contraseña'}
-              </h2>
+              <h2>¿Olvidaste tu contraseña?</h2>
+              <p style={{ marginTop: '10px', color: '#667085' }}>
+                Ingresa tu correo electrónico y te enviaremos las instrucciones para restablecer tu acceso.
+              </p>
             </header>
 
             {error && (
@@ -92,88 +65,39 @@ const ForgotPassword: React.FC = () => {
 
             {success ? (
               <div className="fp-success-box">
-                <p>¡Contraseña actualizada con éxito!</p>
+                <p>¡Correo enviado!</p>
+                <p style={{ fontSize: '0.9rem', marginTop: '10px', fontWeight: 'normal' }}>
+                  Revisa tu bandeja de entrada. Te hemos enviado un enlace para restablecer tu contraseña.
+                </p>
 
-                <Link to="/login" className="fp-button">
-                  Volver al Login <span className="fp-arrow">→</span>
-                </Link>
+                <div style={{ marginTop: '25px' }}>
+                  <Link to="/login" className="fp-button">
+                    Volver al Login <span className="fp-arrow">→</span>
+                  </Link>
+                </div>
               </div>
             ) : (
-              <form
-                onSubmit={step === 1 ? handleSendCode : handleResetPassword}
-              >
-
-                {step === 1 && (
-                  <div className="fp-input-group">
-                    <label>Email</label>
-                    <div className="fp-input-wrapper">
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="correo@ejemplo.com"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                      />
-                      <span className="fp-input-highlight"></span>
-                    </div>
+              <form onSubmit={handleSubmit}>
+                <div className="fp-input-group">
+                  <label>Email</label>
+                  <div className="fp-input-wrapper">
+                    <input
+                      type="email"
+                      name="email"
+                      placeholder="correo@ejemplo.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading}
+                    />
+                    <span className="fp-input-highlight"></span>
                   </div>
-                )}
+                </div>
 
-                {step === 2 && (
-                  <>
-                    <div className="fp-input-group">
-                      <label>Código de Verificación</label>
-                      <div className="fp-input-wrapper">
-                        <input
-                          type="text"
-                          name="code"
-                          placeholder="Ingresa el código"
-                          value={formData.code}
-                          onChange={handleChange}
-                          required
-                        />
-                        <span className="fp-input-highlight"></span>
-                      </div>
-                    </div>
-
-                    <div className="fp-input-group">
-                      <label>Nueva Contraseña</label>
-                      <div className="fp-input-wrapper">
-                        <input
-                          type="password"
-                          name="newPassword"
-                          placeholder="••••••••••••"
-                          value={formData.newPassword}
-                          onChange={handleChange}
-                          required
-                        />
-                        <span className="fp-input-highlight"></span>
-                      </div>
-                    </div>
-
-                    <div className="fp-input-group">
-                      <label>Repetir Contraseña</label>
-                      <div className="fp-input-wrapper">
-                        <input
-                          type="password"
-                          name="confirmPassword"
-                          placeholder="••••••••••••"
-                          value={formData.confirmPassword}
-                          onChange={handleChange}
-                          required
-                        />
-                        <span className="fp-input-highlight"></span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                <button type="submit" className="fp-button">
-                  {step === 1 ? 'Enviar Código' : 'Restablecer Contraseña'}
+                <button type="submit" className="fp-button" disabled={loading}>
+                  {loading ? 'Enviando...' : 'Enviar Enlace de Recuperación'}
                   <span className="fp-arrow">→</span>
                 </button>
-
               </form>
             )}
 

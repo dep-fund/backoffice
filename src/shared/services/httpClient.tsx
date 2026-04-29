@@ -6,7 +6,8 @@
 
 import type { ApiError } from '../types/api.types';
 
-const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
+//const BASE_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
+const BASE_URL = 'http://localhost:8000';
 
 // Recupera el token del sessionStorage (se guarda al hacer login)
 function getToken(): string | null {
@@ -51,7 +52,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
       message = typeof detail === 'string' ? detail : message;
     }
 
-  } catch {}
+  } catch { }
 
   const error: ApiError = { status: response.status, message, detail };
   throw error;
