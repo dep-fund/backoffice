@@ -40,3 +40,4 @@ export async function deleteRole(roleType: string): Promise<void> {
   // Según el formato común de FastAPI, se pasa como query param
   return del<void>(`/admin/role?role_type=${roleType}`);
 }
+

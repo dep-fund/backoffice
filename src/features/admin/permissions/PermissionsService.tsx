@@ -1,4 +1,4 @@
-import { del, get, post } from "../../../shared/services/httpClient";
+import { del, get, patch, post } from "../../../shared/services/httpClient";
 import type { PaginatedResponse } from "../../../shared/types/api.types";
 
 export interface PermissionResponse {
@@ -53,4 +53,16 @@ export async function assignPermissionToRole(data: { role_id: string, permission
 export async function removePermissionFromRole(data: {role_id: string;permission_id: string;
 }): Promise<void> {
   return del<void>('/admin/permission/assigned-permission', true, data);
+}
+
+
+export async function updatePermission(
+  permissionId: string,
+  data: { type: string }
+): Promise<PermissionResponse> {
+  return patch<{ type: string }, PermissionResponse>(
+    `/admin/permission/${permissionId}`,
+    data,
+    true
+  );
 }

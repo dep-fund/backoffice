@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import logoDepFund from '@shared/img/logo_regency.jpg';
 import './PermissionEditPage.css';
+import { updatePermission } from "../PermissionsService";
 
 const PermiseEdit: React.FC = () => {
   const location = useLocation();
@@ -12,11 +13,20 @@ const PermiseEdit: React.FC = () => {
 
   if (!data) return <div className="pe-container">Error: Permiso no encontrado.</div>;
 
-  const handleUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`Acción actualizada: ${accion}`);
-    navigate('/permisos');
-  };
+const handleUpdate = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    await updatePermission(data.id, {
+      type: accion,
+    });
+
+    navigate("/permisos");
+  } catch (error) {
+    console.error("Error updating permission:", error);
+    alert("Error al actualizar el permiso");
+  }
+};
 
   return (
     <div className="pe-container">
