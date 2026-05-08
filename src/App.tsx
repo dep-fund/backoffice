@@ -1,47 +1,78 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-// Auth
-import LoginPage        from './features/auth/pages/LoginPage';
-import RegisterPage     from './features/auth/pages/RegisterPage';
-import ForgotPasswordPage from './features/auth/pages/ForgotPasswordPage';
-import ResetPassword      from './features/auth/pages/ResetPassword';
+import LoginPage from './features/auth/pages/LoginPage';
+import RegisterPage from './features/auth/pages/RegisterPage';
+import DashboardPage from './features/dashboard/pages/DashboardPage';
+import CategoriesPage from './features/categories/pages/CategoriesPage';
+import CreateCategoryPage from './features/categories/pages/CreateCategoryPage';
+import ProjectsPage from './features/projects/pages/ProjectsPage';
+import ProjectDetailPage from './features/projects/pages/ProjectDetailPage';
+import UsersPage from './features/users/pages/UsersPage';
+import ProfilePage from './features/profile/pages/ProfilePage';
+import RolesPage from './features/roles/pages/RolesPage';
+import PermissionsPage from './features/permissions/pages/PermissionsPage';
+import RolePermissionsPage from './features/rolePermission/pages/RolePermissionPage';
+import Layout from './shared/components/Layout/Layout';
 
-// Admin — Users
-import UsersPage        from './features/admin/users/pages/UsersPage';
-import UserRoleEditPage from './features/admin/users/pages/UserRoleEditPage';
+import { AuthProvider, useAuthContext } from './shared/context/AuthContext';
 
-// Admin — Roles
-import RolesPage        from './features/admin/roles/pages/RolesPage';
-import RoleEditPage     from './features/admin/roles/pages/RoleEditPage';
+const ProtectedRoute = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { token, loading } = useAuthContext();
 
-// Admin — Permissions
-import PermissionsPage  from './features/admin/permissions/pages/PermissionsPage';
-import PermissionEditPage from './features/admin/permissions/pages/PermissionEditPage';
-import DashboardPage from './features/dashboard/DashboardPage';
+  if (loading) return null;
 
+  if (!token) {
+    return <Navigate to="/login" replace />;
+  }
 
-const App: React.FC = () => {
+  return <>{children}</>;
+};
+
+const PublicRoute = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const { token, loading } = useAuthContext();
+
+  if (loading) return null;
+
+  if (token) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <>{children}</>;
+};
+
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+    <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+    <Route path="/profile"element={<ProtectedRoute><Layout><ProfilePage /></Layout></ProtectedRoute>}/>
+    <Route path="/dashboard" element={<ProtectedRoute><Layout><DashboardPage /></Layout></ProtectedRoute>} />
+    <Route path="/users" element={<ProtectedRoute><Layout><UsersPage /></Layout></ProtectedRoute>} />
+    <Route path="/projects" element={<ProtectedRoute><Layout><ProjectsPage /></Layout></ProtectedRoute>} />
+    <Route path="/projects/:id" element={<ProtectedRoute><Layout><ProjectDetailPage /></Layout></ProtectedRoute>} />
+    <Route path="/categories" element={<ProtectedRoute><Layout><CategoriesPage /></Layout></ProtectedRoute>} />
+    <Route path="/categories/create" element={<ProtectedRoute><Layout><CreateCategoryPage /></Layout></ProtectedRoute>} />
+    <Route path="/roles" element={<ProtectedRoute><Layout><RolesPage /></Layout></ProtectedRoute>}/>
+    <Route path="/role-permissions"element={<ProtectedRoute><Layout><RolePermissionsPage /></Layout></ProtectedRoute>}/>
+    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+    <Route path="/permissions"element={<ProtectedRoute><Layout><PermissionsPage /></Layout></ProtectedRoute>}/>
+  </Routes>
+);
+
+const App = () => {
   return (
-    
-    <Routes>
-      <Route path="/"                    element={<Navigate to="/login" />} />
-
-      {/* Auth */}
-      <Route path="/login"               element={<LoginPage />} />
-      <Route path="/register"            element={<RegisterPage />} />
-      <Route path="/forgot-password"     element={<ForgotPasswordPage />} />
-      <Route path="/reset-password"      element={<ResetPassword />} />
-
-      {/* Admin */}
-      <Route path="/users"               element={<UsersPage />} />
-      <Route path="/users/edit-role/:id" element={<UserRoleEditPage />} />
-      <Route path="/roles"               element={<RolesPage />} />
-      <Route path="/roles/edit/:id"      element={<RoleEditPage />} />
-      <Route path="/permisos"            element={<PermissionsPage />} />
-      <Route path="/permisos/edit/:id"   element={<PermissionEditPage />} />
-      <Route path="/dashboard"           element={<DashboardPage />} />
-    </Routes>
+    <AuthProvider>
+      <BrowserRouter>
+        <AppRoutes />
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 
