@@ -1,0 +1,102 @@
+.project-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #2C7176;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.project-detail-card {
+  background: white;
+  border-radius: 20px;
+  border: 1px solid #E2E8F0;
+  padding: 36px;
+}
+
+.project-detail-card h1 {
+  font-size: 42px;
+  color: #0F172A;
+  margin-bottom: 16px;
+}
+
+.project-detail-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  margin-top: 32px;
+}
+
+.project-info-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-info-row {
+  height: 64px;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.project-info-row span {
+  color: #64748B;
+}
+
+.project-description-block {
+  margin-top: 42px;
+}
+
+.project-description-block p {
+  margin-top: 16px;
+  line-height: 1.8;
+  color: #475569;
+}
+
+.project-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.project-category-item {
+  background: #FEF3C7;
+  color: #D97706;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.status-approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.status-cancelled {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.project-detail-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-weight: 600;
+}

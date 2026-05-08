@@ -1,0 +1,76 @@
+.categories-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.categories-header span {
+  font-size: 15px;
+  color: #64748B;
+}
+
+.new-category-btn {
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: #EC8F41;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.categories-table-wrap {
+  background: white;
+  border-radius: 18px;
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+}
+
+.categories-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.categories-table th {
+  height: 60px;
+  padding: 0 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94A3B8;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.categories-table td {
+  height: 74px;
+  padding: 0 20px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #475569;
+  font-size: 15px;
+}
+
+.category-name {
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.category-edit-btn {
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: #2C7176;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
