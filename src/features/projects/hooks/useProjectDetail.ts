@@ -20,9 +20,7 @@ export const useProjectDetail = () => {
       try {
         setLoading(true);
         setError('');
-
         const response = await getProjectById(token, id);
-
         setProject(response);
       } catch {
         setError('No se pudo cargar el proyecto');
@@ -34,9 +32,5 @@ export const useProjectDetail = () => {
     fetchProject();
   }, [id, token]);
 
-  return {
-    project,
-    loading,
-    error,
-  };
+  return { project, loading, error, setProject };
 };

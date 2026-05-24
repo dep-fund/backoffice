@@ -100,3 +100,81 @@
   border-radius: 999px;
   font-weight: 600;
 }
+
+.project-detail-top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.project-detail-top-bar h1 {
+  font-size: 36px;
+  color: #0F172A;
+  margin: 0;
+}
+
+/* Verdict action bar */
+.project-verdict-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.verdict-btn-approve,
+.verdict-btn-reject {
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  padding: 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.15s, transform 0.15s;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.verdict-btn-approve {
+  background: #16a34a;
+  color: white;
+}
+
+.verdict-btn-reject {
+  background: #dc2626;
+  color: white;
+}
+
+.verdict-btn-approve:hover,
+.verdict-btn-reject:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+/* Feedback banners */
+.project-action-success {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #15803d;
+  margin-bottom: 20px;
+}
+
+.project-action-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #dc2626;
+  margin-bottom: 20px;
+}

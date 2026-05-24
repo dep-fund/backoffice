@@ -1,0 +1,217 @@
+/* VerdictModal.css */
+
+.verdict-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 28, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlay-in 0.18s ease;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.verdict-modal {
+  width: 100%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 24px 60px rgba(10, 15, 28, 0.18);
+  animation: modal-up 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes modal-up {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+/* Header */
+.verdict-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  gap: 12px;
+}
+
+.verdict-title-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.verdict-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.verdict-icon.approve { background: rgba(22, 163, 74, 0.12); color: #16a34a; }
+.verdict-icon.reject  { background: rgba(220, 38, 38, 0.10); color: #dc2626; }
+
+.verdict-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.verdict-subtitle {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-top: 3px;
+}
+
+.verdict-close {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.verdict-close:hover { background: #e2e8f0; }
+
+/* Project name chip */
+.verdict-project-name {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 20px;
+}
+
+/* Textarea (only for reject) */
+.verdict-textarea-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.verdict-textarea-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.verdict-textarea-group textarea {
+  width: 100%;
+  min-height: 110px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 14px;
+  color: #1e293b;
+  background: #f9fafb;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.verdict-textarea-group textarea:focus {
+  border-color: #dc2626;
+  background: #fff;
+}
+
+.verdict-textarea-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* Approve confirmation text */
+.verdict-approve-confirm {
+  background: rgba(22, 163, 74, 0.07);
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: #15803d;
+  line-height: 1.5;
+}
+
+/* Error */
+.verdict-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #dc2626;
+  margin-bottom: 16px;
+}
+
+/* Actions */
+.verdict-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.verdict-btn-cancel {
+  flex: 1;
+  height: 48px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: white;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.verdict-btn-cancel:hover { background: #f8fafc; }
+
+.verdict-btn-submit {
+  flex: 2;
+  height: 48px;
+  border: none;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: opacity 0.15s, transform 0.15s;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.verdict-btn-submit:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+.verdict-btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.verdict-btn-submit.approve {
+  background: #16a34a;
+  color: white;
+}
+
+.verdict-btn-submit.reject {
+  background: #dc2626;
+  color: white;
+}
