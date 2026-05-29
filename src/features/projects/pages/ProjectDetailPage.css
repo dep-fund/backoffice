@@ -178,3 +178,216 @@
   color: #dc2626;
   margin-bottom: 20px;
 }
+
+/* ── Admin media sections ── */
+/* ── Carousel (copiado de ProjectDetail) ── */
+.pd-hero {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  min-height: 250px;
+  max-height: 450px;
+  background-color: #f3f4f6;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.pd-carousel-bg-blur {
+  position: absolute;
+  inset: -5%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(24px);
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.pd-carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.pd-carousel-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pd-carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: all 0.2s ease;
+}
+
+.pd-carousel-btn:hover { background: rgba(255, 255, 255, 0.4); }
+.pd-carousel-btn--prev { left: 16px; }
+.pd-carousel-btn--next { right: 16px; }
+
+.pd-carousel-dots {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 3;
+}
+
+.pd-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.pd-carousel-dot.active {
+  background: #ffffff;
+  transform: scale(1.2);
+}
+
+.pd-carousel-empty {
+  color: #6b7280;
+  font-size: 14px;
+  z-index: 3;
+}
+
+.pd-admin-carousel-controls button {
+  background: none;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 4px 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #374151;
+}
+
+.pd-admin-carousel-controls button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pd-admin-section {
+  margin-top: 40px;
+}
+
+.pd-admin-section h3 {
+  font-size: 18px;
+  color: #0F172A;
+  margin-bottom: 16px;
+}
+
+.pd-admin-empty {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.pd-admin-carousel-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pd-admin-arrow {
+  background: none;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #374151;
+  flex-shrink: 0;
+}
+
+.pd-admin-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.pd-admin-doc-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #0F172A;
+  transition: background 0.15s;
+}
+
+.pd-admin-doc-card:hover {
+  background: #f8fafc;
+}
+
+.pd-admin-doc-card span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.pd-admin-doc-card small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.pd-admin-adv-card {
+  flex: 1;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pd-admin-adv-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.pd-admin-adv-body {
+  padding: 16px;
+}
+
+.pd-admin-adv-body small {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.pd-admin-adv-body p {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.6;
+}

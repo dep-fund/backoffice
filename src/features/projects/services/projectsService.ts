@@ -53,3 +53,44 @@ export const rejectProject = async (
     token,
   );
 };
+
+// ── Images ──
+export type ProjectImage = { number: number; url: string };
+
+export const getProjectImages = async (
+  token: string,
+  projectId: string,
+): Promise<ProjectImage[]> => {
+  return apiClient<ProjectImage[]>(
+    `${ENDPOINTS.PROJECTS.LIST}/${projectId}/images`,
+    {},
+    token,
+  );
+};
+// ── Documents ──
+export type ProjectDocument = { number: number; url: string };
+
+export const getProjectDocuments = async (
+  token: string,
+  projectId: string,
+): Promise<ProjectDocument[]> => {
+  return apiClient<ProjectDocument[]>(
+    `${ENDPOINTS.PROJECTS.LIST}/${projectId}/documents`,
+    {},
+    token,
+  );
+};
+
+// ── Advances ──
+export type ProjectAdvance = { number: number; description: string; url?: string | null };
+
+export const getProjectAdvances = async (
+  token: string,
+  projectId: string,
+): Promise<ProjectAdvance[]> => {
+  return apiClient<ProjectAdvance[]>(
+    `${ENDPOINTS.PROJECTS.LIST}/${projectId}/advances`,
+    {},
+    token,
+  );
+};
