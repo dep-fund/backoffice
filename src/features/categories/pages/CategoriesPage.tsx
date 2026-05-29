@@ -48,7 +48,10 @@ const CategoriesPage = () => {
                   <td>{category.description}</td>
                   <td>{formatDate(category.created_at)}</td>
                   <td>
-                    <button className="category-edit-btn">
+                    <button
+                      className="category-edit-btn"
+                      onClick={() => navigate(`/categories/edit/${category.id}`)}
+                    >
                       <SquarePen size={14} />
                       Editar
                     </button>

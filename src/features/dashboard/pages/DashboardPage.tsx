@@ -107,7 +107,14 @@ const DashboardPage = () => {
                   <div className="pending-name">{p.name}</div>
                   <div className="pending-location">{p.ubication}</div>
                 </div>
-                <button className="pending-link">Ver</button>
+                <button
+                  className="pending-link"
+                  onClick={() =>
+                    navigate(`/projects/${p.id}`)
+                  }
+                >
+                  Ver
+                </button>
               </div>
             ))
           )}
@@ -120,17 +127,17 @@ const DashboardPage = () => {
               <Users size={24} />
               <span>Gestionar Usuarios</span>
             </button>
-            <button className="quick-item">
+            <button className="quick-item" onClick={() => navigate('/projects')}>
               <FolderKanban size={24} />
               <span>Ver Proyectos</span>
             </button>
-            <button className="quick-item">
+            <button className="quick-item" onClick={() => navigate('/categories')}>
               <Tag size={24} />
               <span>Categorías</span>
             </button>
-            <button className="quick-item">
+            <button className="quick-item" onClick={() => navigate('/role-permissions')}>
               <Shield size={24} />
-              <span>Roles y Permisos</span>
+              <span>Roles y permisos</span>
             </button>
           </div>
         </div>

@@ -59,9 +59,20 @@ export const updateCategory = async (
   return apiClient(
     `${ENDPOINTS.CATEGORIES.LIST}/${id}`,
     {
-      method: 'PUT',
+      method: 'PATCH',
       body: JSON.stringify(payload),
     },
+    token,
+  );
+};
+
+export const getCategoryById = async (
+  token: string,
+  id: string,
+) => {
+  return apiClient<Category>(
+    `${ENDPOINTS.CATEGORIES.LIST}/${id}`,
+    {},
     token,
   );
 };

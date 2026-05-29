@@ -93,7 +93,6 @@
   border-radius: 999px;
 
   background: rgba(44, 113, 118, 0.12);
-
   color: #2c7176;
 
   font-size: 13px;
@@ -109,11 +108,16 @@
   border-radius: 999px;
 
   background: rgba(236, 143, 65, 0.14);
-
   color: #ec8f41;
 
   font-size: 13px;
   font-weight: 700;
+}
+
+.assignment-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .delete-assignment-btn {
@@ -122,10 +126,10 @@
   border: none;
   border-radius: 10px;
 
-  background: #fee2e2;
-  color: #dc2626;
+  background: #dc2626;
+  color: white;
 
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
 
@@ -140,7 +144,7 @@
 }
 
 .delete-assignment-btn:hover {
-  background: #fecaca;
+  background: #b91c1c;
 }
 
 .role-permissions-loading,
@@ -148,8 +152,11 @@
 .empty-state {
   padding: 20px;
 
-  text-align: center;
+  font-size: 14px;
+}
 
+.role-permissions-loading,
+.empty-state {
   color: #64748b;
 }
 

@@ -84,3 +84,18 @@
 .roles-error {
   color: #DC2626;
 }
+
+.role-delete-btn {
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: #DC2626;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}

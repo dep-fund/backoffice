@@ -47,16 +47,14 @@ export const createRole = async (
   );
 };
 
-export const updateRole = async (
+export const deleteRole = async (
   token: string,
-  id: string,
-  payload: RolePayload,
+  type: string,
 ) => {
   return apiClient(
-    `${ENDPOINTS.ROLES.LIST}/${id}`,
+    `${ENDPOINTS.ROLES.LIST}?type=${type}`,
     {
-      method: 'PUT',
-      body: JSON.stringify(payload),
+      method: 'DELETE',
     },
     token,
   );

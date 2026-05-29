@@ -8,6 +8,7 @@ interface Props {
   loading: boolean;
 
   type: string;
+  error: string;
 
   onClose: () => void;
 
@@ -25,6 +26,7 @@ const PermissionModal = ({
   title,
   loading,
   type,
+  error,
   onClose,
   onSubmit,
   setType,
@@ -38,6 +40,7 @@ const PermissionModal = ({
           <h2>{title}</h2>
 
           <button
+            type="button"
             className="permission-close-btn"
             onClick={onClose}
           >
@@ -57,6 +60,12 @@ const PermissionModal = ({
               required
             />
           </div>
+
+          {error && (
+            <div className="permission-modal-error">
+              {error}
+            </div>
+          )}
 
           <button
             type="submit"

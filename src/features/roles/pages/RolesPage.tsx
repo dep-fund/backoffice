@@ -1,6 +1,6 @@
 import {
   Plus,
-  SquarePen,
+  Trash2,
 } from 'lucide-react';
 
 import { useState } from 'react';
@@ -9,11 +9,13 @@ import { useAuthContext } from '../../../shared/context/AuthContext';
 
 import {
   createRole,
+  deleteRole,
 } from '../services/rolesService';
 
 import { useRoles } from '../hooks/useRoles';
 
 import RoleModal from '../components/RoleModal';
+import DeleteRoleModal from '../components/DeleteRoleModal';
 
 import './RolesPage.css';
 
@@ -34,6 +36,18 @@ const RolesPage = () => {
 
   const [creating, setCreating] =
     useState(false);
+
+  const [openDeleteModal, setOpenDeleteModal] =
+    useState(false);
+
+  const [selectedRole, setSelectedRole] =
+    useState('');
+
+  const [deleting, setDeleting] =
+    useState(false);
+
+  const [deleteError, setDeleteError] =
+    useState('');
 
   const resetModal = () => {
     setOpenModal(false);
@@ -61,6 +75,30 @@ const RolesPage = () => {
     }
   };
 
+  const handleDelete = async () => {
+    if (!token) return;
+  
+    try {
+      setDeleting(true);
+      setDeleteError('');
+  
+      await deleteRole(
+        token,
+        selectedRole,
+      );
+  
+      setOpenDeleteModal(false);
+  
+      window.location.reload();
+    } catch {
+      setDeleteError(
+        'No se puede eliminar un rol que tiene usuarios asignados.',
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <>
       <div>
@@ -73,7 +111,6 @@ const RolesPage = () => {
             className="new-role-btn"
             onClick={() => {
               setType('');
-
               setOpenModal(true);
             }}
           >
@@ -111,10 +148,19 @@ const RolesPage = () => {
 
                     <td>
                       <button
-                        className="role-edit-btn"
+                        className="role-delete-btn"
+                        onClick={() => {
+                          setSelectedRole(
+                            role.type,
+                          );
+
+                          setOpenDeleteModal(
+                            true,
+                          );
+                        }}
                       >
-                        <SquarePen size={14} />
-                        Editar
+                        <Trash2 size={14} />
+                        Eliminar
                       </button>
                     </td>
                   </tr>
@@ -133,6 +179,18 @@ const RolesPage = () => {
         onClose={resetModal}
         onSubmit={handleCreate}
         setType={setType}
+      />
+
+      <DeleteRoleModal
+        open={openDeleteModal}
+        roleType={selectedRole}
+        loading={deleting}
+        error={deleteError}
+        onClose={() => {
+          setOpenDeleteModal(false);
+          setDeleteError('');
+        }}
+        onConfirm={handleDelete}
       />
     </>
   );

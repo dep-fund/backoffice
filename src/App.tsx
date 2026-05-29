@@ -5,6 +5,7 @@ import RegisterPage from './features/auth/pages/RegisterPage';
 import DashboardPage from './features/dashboard/pages/DashboardPage';
 import CategoriesPage from './features/categories/pages/CategoriesPage';
 import CreateCategoryPage from './features/categories/pages/CreateCategoryPage';
+import EditCategoryPage from './features/categories/pages/EditCategoryPage';
 import ProjectsPage from './features/projects/pages/ProjectsPage';
 import ProjectDetailPage from './features/projects/pages/ProjectDetailPage';
 import UsersPage from './features/users/pages/UsersPage';
@@ -59,6 +60,7 @@ const AppRoutes = () => (
     <Route path="/projects/:id" element={<ProtectedRoute><Layout><ProjectDetailPage /></Layout></ProtectedRoute>} />
     <Route path="/categories" element={<ProtectedRoute><Layout><CategoriesPage /></Layout></ProtectedRoute>} />
     <Route path="/categories/create" element={<ProtectedRoute><Layout><CreateCategoryPage /></Layout></ProtectedRoute>} />
+    <Route path="/categories/edit/:id" element={<ProtectedRoute><Layout><EditCategoryPage /></Layout></ProtectedRoute>}/>
     <Route path="/roles" element={<ProtectedRoute><Layout><RolesPage /></Layout></ProtectedRoute>}/>
     <Route path="/role-permissions"element={<ProtectedRoute><Layout><RolePermissionsPage /></Layout></ProtectedRoute>}/>
     <Route path="*" element={<Navigate to="/dashboard" replace />} />

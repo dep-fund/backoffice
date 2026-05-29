@@ -45,8 +45,21 @@ export const updatePermission = async (
   return apiClient(
     `${ENDPOINTS.PERMISSIONS.LIST}/${id}`,
     {
-      method: 'PUT',
+      method: 'PATCH',
       body: JSON.stringify(payload),
+    },
+    token,
+  );
+};
+
+export const deletePermission = async (
+  token: string,
+  type: string,
+) => {
+  return apiClient(
+    `${ENDPOINTS.PERMISSIONS.LIST}?type=${type}`,
+    {
+      method: 'DELETE',
     },
     token,
   );

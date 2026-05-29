@@ -79,3 +79,24 @@
 .permissions-error {
   padding: 20px;
 }
+
+.permission-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.permission-delete-btn {
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: #DC2626;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
