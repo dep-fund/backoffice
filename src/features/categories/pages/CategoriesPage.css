@@ -60,6 +60,12 @@
   color: #0F172A;
 }
 
+.category-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .category-edit-btn {
   height: 38px;
   border-radius: 10px;
@@ -73,4 +79,115 @@
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
+}
+
+.category-delete-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1.5px solid #EF4444;
+  background: transparent;
+  color: #EF4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease;
+}
+
+.category-delete-btn:hover {
+  background: #EF4444;
+  color: white;
+}
+
+.delete-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.delete-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 32px 28px 28px;
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.15);
+}
+
+.delete-modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #FEF2F2;
+  color: #EF4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.delete-modal h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0F172A;
+  margin: 0;
+}
+
+.delete-modal p {
+  font-size: 14px;
+  color: #64748B;
+  text-align: center;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.delete-modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  width: 100%;
+}
+
+.delete-modal-cancel {
+  flex: 1;
+  height: 44px;
+  border-radius: 12px;
+  border: 1.5px solid #E2E8F0;
+  background: white;
+  color: #475569;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.delete-modal-cancel:hover {
+  background: #F8FAFC;
+}
+
+.delete-modal-confirm {
+  flex: 1;
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: #EF4444;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.delete-modal-confirm:hover {
+  background: #DC2626;
 }

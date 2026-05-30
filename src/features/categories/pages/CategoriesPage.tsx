@@ -1,8 +1,8 @@
-import { Plus, SquarePen } from 'lucide-react';
+import { Plus, SquarePen, Trash2 } from 'lucide-react';
+import { useState } from 'react';
 import { useCategories } from '../hooks/useCategories';
 import './CategoriesPage.css';
 import { useNavigate } from 'react-router-dom';
-
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString('es-AR');
@@ -10,12 +10,17 @@ const formatDate = (date: string) =>
 const CategoriesPage = () => {
   const { categories, loading, error } = useCategories();
   const navigate = useNavigate();
+  const [categoryToDelete, setCategoryToDelete] = useState<{ id: number; name: string } | null>(null);
+
+  const handleDelete = (id: number) => {
+    console.log('Eliminar categoría', id);
+    setCategoryToDelete(null);
+  };
 
   return (
     <div>
       <div className="categories-header">
         <span>{categories.length} categorías registradas</span>
-
         <button
           className="new-category-btn"
           onClick={() => navigate('/categories/create')}
@@ -40,7 +45,6 @@ const CategoriesPage = () => {
                 <th>ACCIONES</th>
               </tr>
             </thead>
-
             <tbody>
               {categories.map((category) => (
                 <tr key={category.id}>
@@ -48,13 +52,21 @@ const CategoriesPage = () => {
                   <td>{category.description}</td>
                   <td>{formatDate(category.created_at)}</td>
                   <td>
-                    <button
-                      className="category-edit-btn"
-                      onClick={() => navigate(`/categories/edit/${category.id}`)}
-                    >
-                      <SquarePen size={14} />
-                      Editar
-                    </button>
+                    <div className="category-actions">
+                      <button
+                        className="category-edit-btn"
+                        onClick={() => navigate(`/categories/edit/${category.id}`)}
+                      >
+                        <SquarePen size={14} />
+                        Editar
+                      </button>
+                      <button
+                        className="category-delete-btn"
+                        onClick={() => setCategoryToDelete({ id: category.id, name: category.name })}
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -62,6 +74,26 @@ const CategoriesPage = () => {
           </table>
         )}
       </div>
+
+      {categoryToDelete && (
+        <div className="delete-modal-overlay" onClick={() => setCategoryToDelete(null)}>
+          <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="delete-modal-icon">
+              <Trash2 size={28} />
+            </div>
+            <h3>¿Eliminar categoría?</h3>
+            <p>Estás por eliminar <strong>{categoryToDelete.name}</strong>. Esta acción no se puede deshacer.</p>
+            <div className="delete-modal-actions">
+              <button className="delete-modal-cancel" onClick={() => setCategoryToDelete(null)}>
+                Cancelar
+              </button>
+              <button className="delete-modal-confirm" onClick={() => handleDelete(categoryToDelete.id)}>
+                Sí, eliminar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
