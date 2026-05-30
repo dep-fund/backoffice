@@ -4,22 +4,37 @@ import './CategoriesPage.css';
 import { useNavigate } from 'react-router-dom';
 import { deleteCategory } from '../services/categoriesService';
 import { useAuthContext } from '../../../shared/context/AuthContext';
-import { Plus, SquarePen, Trash2 } from 'lucide-react';
+import { Plus, SquarePen, Trash2, AlertCircle } from 'lucide-react';
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString('es-AR');
 
 const CategoriesPage = () => {
   const { token } = useAuthContext();
-  const { categories, loading, error } = useCategories();
+  const { categories, loading, error, page, setPage, totalPages, total, search, setSearch, refresh } = useCategories();
   const navigate = useNavigate();
   const [categoryToDelete, setCategoryToDelete] = useState<{ id: number; name: string } | null>(null);
+  const [deleteError, setDeleteError] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
-const handleDelete = async (id: number) => {
-  if (!token) return;
-  await deleteCategory(token, String(id));
-  setCategoryToDelete(null);
-};
+  const handleDelete = async (id: number) => {
+    if (!token) return;
+    try {
+      setDeleting(true);
+      setDeleteError('');
+      await deleteCategory(token, String(id));
+      setCategoryToDelete(null);
+      refresh();
+    } catch (e: any) {
+      if (e?.status === 400 || e?.statusCode === 400) {
+        setDeleteError('No se puede eliminar una categoría asociada a proyectos.');
+      } else {
+        setDeleteError('No se pudo eliminar la categoría.');
+      }
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <div>
@@ -66,7 +81,10 @@ const handleDelete = async (id: number) => {
                       </button>
                       <button
                         className="category-delete-btn"
-                        onClick={() => setCategoryToDelete({ id: category.id, name: category.name })}
+                        onClick={() => {
+                          setDeleteError('');
+                          setCategoryToDelete({ id: category.id, name: category.name });
+                        }}
                       >
                         <Trash2 size={15} />
                       </button>
@@ -80,19 +98,32 @@ const handleDelete = async (id: number) => {
       </div>
 
       {categoryToDelete && (
-        <div className="delete-modal-overlay" onClick={() => setCategoryToDelete(null)}>
+        <div className="delete-modal-overlay" onClick={() => { if (!deleting) { setCategoryToDelete(null); setDeleteError(''); } }}>
           <div className="delete-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="delete-modal-icon">
-              <Trash2 size={28} />
+            <div className={`delete-modal-icon ${deleteError ? 'delete-modal-icon--error' : ''}`}>
+              {deleteError ? <AlertCircle size={28} /> : <Trash2 size={28} />}
             </div>
             <h3>¿Eliminar categoría?</h3>
             <p>Estás por eliminar <strong>{categoryToDelete.name}</strong>. Esta acción no se puede deshacer.</p>
+            {deleteError && (
+              <div className="delete-modal-error">
+                {deleteError}
+              </div>
+            )}
             <div className="delete-modal-actions">
-              <button className="delete-modal-cancel" onClick={() => setCategoryToDelete(null)}>
+              <button
+                className="delete-modal-cancel"
+                onClick={() => { setCategoryToDelete(null); setDeleteError(''); }}
+                disabled={deleting}
+              >
                 Cancelar
               </button>
-              <button className="delete-modal-confirm" onClick={() => handleDelete(categoryToDelete.id)}>
-                Sí, eliminar
+              <button
+                className="delete-modal-confirm"
+                onClick={() => handleDelete(categoryToDelete.id)}
+                disabled={deleting}
+              >
+                {deleting ? 'Eliminando...' : 'Sí, eliminar'}
               </button>
             </div>
           </div>

@@ -15,6 +15,7 @@ export const useCategories = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
   const [search, setSearch] = useState('');
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,7 +45,7 @@ export const useCategories = () => {
     };
 
     fetchCategories();
-  }, [token, page, search]);
+  }, [token, page, search, refreshKey]);
 
   return {
     categories,
@@ -56,5 +57,6 @@ export const useCategories = () => {
     total,
     search,
     setSearch,
+    refresh: () => setRefreshKey((k) => k + 1),
   };
 };
