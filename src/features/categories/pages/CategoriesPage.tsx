@@ -1,21 +1,25 @@
-import { Plus, SquarePen, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useCategories } from '../hooks/useCategories';
 import './CategoriesPage.css';
 import { useNavigate } from 'react-router-dom';
+import { deleteCategory } from '../services/categoriesService';
+import { useAuthContext } from '../../../shared/context/AuthContext';
+import { Plus, SquarePen, Trash2 } from 'lucide-react';
 
 const formatDate = (date: string) =>
   new Date(date).toLocaleDateString('es-AR');
 
 const CategoriesPage = () => {
+  const { token } = useAuthContext();
   const { categories, loading, error } = useCategories();
   const navigate = useNavigate();
   const [categoryToDelete, setCategoryToDelete] = useState<{ id: number; name: string } | null>(null);
 
-  const handleDelete = (id: number) => {
-    console.log('Eliminar categoría', id);
-    setCategoryToDelete(null);
-  };
+const handleDelete = async (id: number) => {
+  if (!token) return;
+  await deleteCategory(token, String(id));
+  setCategoryToDelete(null);
+};
 
   return (
     <div>

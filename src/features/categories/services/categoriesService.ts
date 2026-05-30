@@ -76,3 +76,16 @@ export const getCategoryById = async (
     token,
   );
 };
+
+export const deleteCategory = async (
+  token: string,
+  id: string,
+) => {
+  return apiClient(
+    `${ENDPOINTS.CATEGORIES.LIST}/${id}`,
+    {
+      method: 'DELETE',
+    },
+    token,
+  );
+};
