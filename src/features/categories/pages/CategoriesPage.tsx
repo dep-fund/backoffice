@@ -11,13 +11,13 @@ const formatDate = (date: string) =>
 
 const CategoriesPage = () => {
   const { token } = useAuthContext();
-  const { categories, loading, error, page, setPage, totalPages, total, search, setSearch, refresh } = useCategories();
+  const { categories, loading, error, refresh } = useCategories();
   const navigate = useNavigate();
-  const [categoryToDelete, setCategoryToDelete] = useState<{ id: number; name: string } | null>(null);
+  const [categoryToDelete, setCategoryToDelete] = useState<{ id: string; name: string } | null>(null);
   const [deleteError, setDeleteError] = useState('');
   const [deleting, setDeleting] = useState(false);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!token) return;
     try {
       setDeleting(true);
