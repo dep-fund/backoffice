@@ -26,7 +26,8 @@ const CategoriesPage = () => {
       setCategoryToDelete(null);
       refresh();
     } catch (e: any) {
-      if (e?.status === 400 || e?.statusCode === 400) {
+
+      if (e?.message === 'Error 400'){
         setDeleteError('No se puede eliminar una categoría asociada a proyectos.');
       } else {
         setDeleteError('No se pudo eliminar la categoría.');
