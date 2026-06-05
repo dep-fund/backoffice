@@ -94,3 +94,26 @@ export const getProjectAdvances = async (
     token,
   );
 };
+
+
+
+export const updateProject = async (
+  token: string,
+  id: string,
+  data: {
+    name?: string;
+    description?: string;
+    ubication?: string;
+    annual_expenses?: number | null;
+    annual_gross_profit?: number | null;
+  },
+): Promise<ProjectResponse> => {
+  return apiClient<ProjectResponse>(
+    ENDPOINTS.PROJECTS.UPDATE(id),
+    {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    },
+    token,
+  );
+};
