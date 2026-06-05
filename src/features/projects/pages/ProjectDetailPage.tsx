@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronLeft, ChevronRight, FileText } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronLeft, ChevronRight, FileText, Edit2, Save, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useProjectDetail } from '../hooks/useProjectDetail';
 import {
@@ -8,7 +8,9 @@ import {
   getProjectImages,
   getProjectDocuments,
   getProjectAdvances,
+  updateProject,
 } from '../services/projectsService';
+import { useCategories } from '../../categories/hooks/useCategories'; 
 import type { ProjectImage, ProjectDocument, ProjectAdvance } from '../services/projectsService';
 import { useAuthContext } from '../../../shared/context/AuthContext';
 import VerdictModal from '../components/VerdictModal';
@@ -30,11 +32,21 @@ const getFileName = (url: string) =>
 const ProjectDetailPage = () => {
   const { project, loading, error, setProject } = useProjectDetail();
   const { token } = useAuthContext();
+  const { categories } = useCategories(); 
 
   const [modalMode, setModalMode] = useState<'approve' | 'reject' | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionError, setActionError] = useState('');
   const [actionSuccess, setActionSuccess] = useState('');
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    ubication: '',
+    risk: '', // Nuevo campo para el formulario
+  });
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
 
   const [images, setImages] = useState<ProjectImage[]>([]);
   const [currentImage, setCurrentImage] = useState(0);
@@ -42,6 +54,18 @@ const ProjectDetailPage = () => {
   const [advances, setAdvances] = useState<ProjectAdvance[]>([]);
   const [currentDoc, setCurrentDoc] = useState(0);
   const [currentAdv, setCurrentAdv] = useState(0);
+
+  useEffect(() => {
+    if (project) {
+      setFormData({
+        name: project.name,
+        description: project.description,
+        ubication: project.ubication,
+        risk: project.risk ?? '',
+      });
+      setSelectedCategoryIds(project.categories.map((c) => c.id));
+    }
+  }, [project]);
 
   useEffect(() => {
     if (!project || !token) return;
@@ -54,6 +78,58 @@ const ProjectDetailPage = () => {
   if (error || !project) return <div className="project-detail-error">No se pudo cargar el proyecto</div>;
 
   const isPending = project.state === 'PENDING';
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCategoryChange = (categoryId: string) => {
+    setSelectedCategoryIds((prev) =>
+      prev.some((id) => String(id) === String(categoryId))
+        ? prev.filter((id) => String(id) !== String(categoryId))
+        : [...prev, categoryId]
+    );
+  };
+
+  const handleSaveChanges = async () => {
+    if (!token || !project) return;
+    try {
+      setActionLoading(true);
+      setActionError('');
+      setActionSuccess('');
+
+      const payload = {
+        name: formData.name,
+        description: formData.description,
+        ubication: formData.ubication,
+        risk: formData.risk !== '' ? formData.risk : null, // Mandamos el nuevo nivel de riesgo
+        category_ids: selectedCategoryIds,
+      };
+
+      const updated = await updateProject(token, project.id, payload);
+      
+      setProject(updated);
+      setIsEditing(false);
+      setActionSuccess('Proyecto actualizado correctamente.');
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Ocurrió un error al actualizar el proyecto.');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setFormData({
+      name: project.name,
+      description: project.description,
+      ubication: project.ubication,
+      risk: project.risk ?? '',
+    });
+    setSelectedCategoryIds(project.categories.map((c) => c.id));
+    setIsEditing(false);
+    setActionError('');
+  };
 
   const handleConfirm = async (reason?: string) => {
     if (!token || !project) return;
@@ -86,16 +162,44 @@ const ProjectDetailPage = () => {
 
       <div className="project-detail-card">
         <div className="project-detail-top-bar">
-          <h1>{project.name}</h1>
-          <div className={`project-detail-status status-${project.state.toLowerCase()}`}>
-            {project.state}
+          {isEditing ? (
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="edit-input-title"
+            />
+          ) : (
+            <h1>{project.name}</h1>
+          )}
+          
+          <div className="project-detail-actions-zone">
+            {isEditing ? (
+              <div className="edit-actions-buttons">
+                <button className="btn-save" onClick={handleSaveChanges} disabled={actionLoading}>
+                  <Save size={16} /> {actionLoading ? 'Guardando...' : 'Guardar'}
+                </button>
+                <button className="btn-cancel" onClick={handleCancelEdit} disabled={actionLoading}>
+                  <X size={16} /> Cancelar
+                </button>
+              </div>
+            ) : (
+              <button className="btn-edit-mode" onClick={() => setIsEditing(true)}>
+                <Edit2 size={16} /> Editar Proyecto
+              </button>
+            )}
+
+            <div className={`project-detail-status status-${project.state.toLowerCase()}`}>
+              {project.state}
+            </div>
           </div>
         </div>
 
         {actionSuccess && <div className="project-action-success">✓ {actionSuccess}</div>}
         {actionError && <div className="project-action-error">{actionError}</div>}
 
-        {isPending && (
+        {isPending && !isEditing && (
           <div className="project-verdict-bar">
             <button
               className="verdict-btn-approve"
@@ -112,7 +216,6 @@ const ProjectDetailPage = () => {
           </div>
         )}
 
-        {/* ── Imágenes ── */}
         <div className="pd-hero">
           {images.length > 0 ? (
             <>
@@ -165,9 +268,63 @@ const ProjectDetailPage = () => {
                 <span>Monto Objetivo:</span>
                 <strong>{formatCurrency(Number(project.total_amount))}</strong>
               </div>
+              
+              <div className="project-info-row">
+                <span>Monto Mínimo de Inversión:</span>
+                <strong>{project.min_amount !== null && project.min_amount !== undefined ? formatCurrency(Number(project.min_amount)) : 'No especificado'}</strong>
+              </div>
+
               <div className="project-info-row">
                 <span>Ubicación:</span>
-                <strong>{project.ubication}</strong>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    name="ubication"
+                    value={formData.ubication}
+                    onChange={handleInputChange}
+                    className="edit-input-field"
+                  />
+                ) : (
+                  <strong>{project.ubication}</strong>
+                )}
+              </div>
+
+              <div className="project-info-row">
+                <span>Nivel de Riesgo:</span>
+                {isEditing ? (
+                  <select
+                    name="risk"
+                    value={formData.risk}
+                    onChange={handleInputChange}
+                    className="edit-select-field"
+                  >
+                    <option value="">Seleccionar riesgo</option>
+                    <option value="LOW">LOW</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="HIGH">HIGH</option>
+                  </select>
+                ) : (
+                  <strong className={`project-risk-badge risk-${project.risk?.toLowerCase() || 'none'}`}>
+                    {project.risk ?? 'No especificado'}
+                  </strong>
+                )}
+              </div>
+
+              <div className="project-info-row">
+                <span>Gastos Anuales:</span>
+                <strong>{project.annual_expenses !== null && project.annual_expenses !== undefined ? formatCurrency(Number(project.annual_expenses)) : 'No especificado'}</strong>
+              </div>
+              <div className="project-info-row">
+                <span>Ganancia Bruta Anual:</span>
+                <strong>{project.annual_gross_profit !== null && project.annual_gross_profit !== undefined ? formatCurrency(Number(project.annual_gross_profit)) : 'No especificado'}</strong>
+              </div>
+              <div className="project-info-row">
+                <span>Beneficio Anual Estimado:</span>
+                <strong>{project.annual_benefits !== null && project.annual_benefits !== undefined ? formatCurrency(Number(project.annual_benefits)) : 'No calculado'}</strong>
+              </div>
+              <div className="project-info-row">
+                <span>ROI:</span>
+                <strong>{project.roi !== null && project.roi !== undefined ? `${project.roi}%` : 'No calculado'}</strong>
               </div>
               <div className="project-info-row">
                 <span>Fecha de Creación:</span>
@@ -182,84 +339,90 @@ const ProjectDetailPage = () => {
 
           <div>
             <h3>Categorías</h3>
-            <div className="project-categories">
-              {project.categories.map((category) => (
-                <span key={category.id} className="project-category-item">
-                  {category.name}
-                </span>
-              ))}
-            </div>
+            {isEditing ? (
+              <div className="edit-categories-checklist">
+                {!categories || categories.length === 0 ? (
+                  <span className="pd-admin-empty" style={{ fontSize: '14px' }}>
+                    Cargando catálogo...
+                  </span>
+                ) : (
+                  categories.map((category) => (
+                    <label key={category.id} className="category-checkpoint-label">
+                      <input
+                        type="checkbox"
+                        checked={selectedCategoryIds.some((id) => String(id) === String(category.id))}
+                        onChange={() => handleCategoryChange(category.id)}
+                      />
+                      {category.name}
+                    </label>
+                  ))
+                )}
+              </div>
+            ) : (
+              <div className="project-categories">
+                {project.categories.map((category) => (
+                  <span key={category.id} className="project-category-item">
+                    {category.name}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
         <div className="project-description-block">
           <h3>Descripción</h3>
-          <p>{project.description}</p>
+          {isEditing ? (
+            <textarea
+              name="description"
+              value={formData.description}
+              onChange={handleInputChange}
+              className="edit-textarea-field"
+              rows={5}
+            />
+          ) : (
+            <p>{project.description}</p>
+          )}
         </div>
 
-        {/* ── Documentos ── */}
         <div className="pd-admin-section">
           <h3>Documentos</h3>
           {documents.length === 0 ? (
             <p className="pd-admin-empty">Sin documentos cargados.</p>
           ) : (
             <div className="pd-admin-carousel-row">
-              <button
-                className="pd-admin-arrow"
-                onClick={() => setCurrentDoc((i) => Math.max(0, i - 1))}
-                disabled={currentDoc === 0}
-              >
+              <button className="pd-admin-arrow" onClick={() => setCurrentDoc((i) => Math.max(0, i - 1))} disabled={currentDoc === 0}>
                 <ChevronLeft size={18} />
               </button>
-              <a
-                href={documents[currentDoc].url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="pd-admin-doc-card"
-              >
+              <a href={documents[currentDoc].url} target="_blank" rel="noopener noreferrer" className="pd-admin-doc-card">
                 <FileText size={28} color="#EC8F41" />
                 <span>{getFileName(documents[currentDoc].url)}</span>
                 <small>Documento #{documents[currentDoc].number}</small>
               </a>
-              <button
-                className="pd-admin-arrow"
-                onClick={() => setCurrentDoc((i) => Math.min(documents.length - 1, i + 1))}
-                disabled={currentDoc === documents.length - 1}
-              >
+              <button className="pd-admin-arrow" onClick={() => setCurrentDoc((i) => Math.min(documents.length - 1, i + 1))} disabled={currentDoc === documents.length - 1}>
                 <ChevronRight size={18} />
               </button>
             </div>
           )}
         </div>
 
-         {/* ── Avances ── */}
          <div className="pd-admin-section">
           <h3>Avances</h3>
           {advances.length === 0 ? (
             <p className="pd-admin-empty">Sin avances publicados.</p>
           ) : (
             <div className="pd-admin-carousel-row">
-              <button
-                className="pd-admin-arrow"
-                onClick={() => setCurrentAdv((i) => Math.max(0, i - 1))}
-                disabled={currentAdv === 0}
-              >
+              <button className="pd-admin-arrow" onClick={() => setCurrentAdv((i) => Math.max(0, i - 1))} disabled={currentAdv === 0}>
                 <ChevronLeft size={18} />
               </button>
               <div className="pd-admin-adv-card">
-                {advances[currentAdv].url && (
-                  <img src={advances[currentAdv].url!} alt={`avance-${currentAdv + 1}`} />
-                )}
+                {advances[currentAdv].url && <img src={advances[currentAdv].url!} alt={`avance-${currentAdv + 1}`} />}
                 <div className="pd-admin-adv-body">
                   <small>Avance #{advances[currentAdv].number}</small>
                   <p>{advances[currentAdv].description}</p>
                 </div>
               </div>
-              <button
-                className="pd-admin-arrow"
-                onClick={() => setCurrentAdv((i) => Math.min(advances.length - 1, i + 1))}
-                disabled={currentAdv === advances.length - 1}
-              >
+              <button className="pd-admin-arrow" onClick={() => setCurrentAdv((i) => Math.min(advances.length - 1, i + 1))} disabled={currentAdv === advances.length - 1}>
                 <ChevronRight size={18} />
               </button>
             </div>
