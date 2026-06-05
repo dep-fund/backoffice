@@ -71,7 +71,7 @@ const AppRoutes = () => (
 const App = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/admin">
         <AppRoutes />
       </BrowserRouter>
     </AuthProvider>
