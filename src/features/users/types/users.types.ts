@@ -30,4 +30,11 @@ export interface ProjectResponse {
   categories: Array<{ id: string; name: string; description: string | null; created_at: string; updated_at: string }>;
   created_at: string;
   updated_at: string;
+  min_amount: string | null;
+  risk: 'LOW' | 'MEDIUM' | 'HIGH' | null;
+  annual_expenses: string | null;
+  annual_gross_profit: string | null;
+  roi: string | null;
+  annual_benefits: string | null;
+  suffix: string | null;
 }
