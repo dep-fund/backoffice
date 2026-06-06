@@ -1,0 +1,91 @@
+.role-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+  
+.role-modal {
+    width: 100%;
+    max-width: 460px;
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+}
+  
+.role-modal h2 {
+    font-size: 24px;
+    color: #0F172A;
+    margin: 0;
+}
+  
+.delete-role-text {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.6;
+}
+  
+.delete-role-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+  
+.delete-cancel-btn {
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: 1px solid #CBD5E1;
+    background: white;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+  
+  .delete-cancel-btn:hover {
+    background: #F8FAFC;
+}
+  
+.delete-confirm-btn {
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: none;
+    background: #DC2626;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+  
+.delete-confirm-btn:hover {
+    background: #B91C1C;
+}
+  
+.delete-confirm-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.delete-role-error {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #B91C1C;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+

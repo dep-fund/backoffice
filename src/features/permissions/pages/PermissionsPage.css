@@ -1,0 +1,102 @@
+.permissions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.permissions-header span {
+  font-size: 15px;
+  color: #64748B;
+}
+
+.new-permission-btn {
+  height: 46px;
+  border: none;
+  border-radius: 12px;
+  background: #EC8F41;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.permissions-table-wrap {
+  background: white;
+  border-radius: 18px;
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+}
+
+.permissions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.permissions-table th {
+  height: 60px;
+  padding: 0 20px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  color: #94A3B8;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.permissions-table td {
+  height: 74px;
+  padding: 0 20px;
+  border-bottom: 1px solid #F1F5F9;
+  color: #475569;
+  font-size: 15px;
+}
+
+.permission-name {
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.permission-edit-btn {
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: #2C7176;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.permissions-loading,
+.permissions-error {
+  padding: 20px;
+}
+
+.permission-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.permission-delete-btn {
+  height: 38px;
+  border-radius: 10px;
+  border: none;
+  background: #DC2626;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}

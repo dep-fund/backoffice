@@ -1,0 +1,75 @@
+.permission-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+  }
+  
+  .permission-modal {
+    width: 100%;
+    max-width: 460px;
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.18);
+  }
+  
+  .permission-modal h2 {
+    font-size: 24px;
+    color: #0F172A;
+    margin: 0;
+  }
+  
+  .delete-permission-text {
+    font-size: 15px;
+    color: #475569;
+    line-height: 1.6;
+  }
+  
+  .delete-permission-error {
+    background: #FEF2F2;
+    border: 1px solid #FECACA;
+    color: #B91C1C;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .delete-permission-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .delete-permission-cancel-btn {
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: 1px solid #CBD5E1;
+    background: white;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .delete-permission-confirm-btn {
+    height: 42px;
+    padding: 0 18px;
+    border-radius: 10px;
+    border: none;
+    background: #DC2626;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+  }

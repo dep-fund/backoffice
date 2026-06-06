@@ -1,0 +1,62 @@
+.edit-category-page {
+    display: flex;
+    justify-content: center;
+  }
+  
+.edit-category-form {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+    border: 1px solid #E2E8F0;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+  
+.edit-category-form h1 {
+    font-size: 26px;
+    color: #0F172A;
+}
+  
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+  
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #334155;
+}
+  
+.form-group input,
+.form-group textarea {
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+}
+  
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+  
+.edit-category-btn {
+    height: 48px;
+    border: none;
+    border-radius: 12px;
+    background: #2C7176;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+  
+.edit-category-error {
+    color: #DC2626;
+    font-size: 14px;
+}

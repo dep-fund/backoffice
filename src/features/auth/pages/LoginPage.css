@@ -1,0 +1,147 @@
+.auth-bg {
+  min-height: 100vh;
+  background-color: #F7F9FA;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 48px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+.auth-logo {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.auth-logo-text {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-logo-dep {
+  color: #EC8F41;
+}
+
+.auth-logo-fund {
+  color: #2C7176;
+}
+
+.auth-subtitle {
+  text-align: center;
+  color: #64748B;
+  font-size: 14px;
+  margin-bottom: 32px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-field {
+  margin-bottom: 20px;
+}
+
+.auth-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1E293B;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-input:focus {
+  border-color: #2C7176;
+}
+
+.auth-input::placeholder {
+  color: #A0AEC0;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 12px;
+  background: #EC8F41;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background 0.2s, opacity 0.2s;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-btn:hover:not(:disabled) {
+  background: #d97d30;
+}
+
+.auth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.auth-divider {
+  border: none;
+  border-top: 1px solid #F1F5F9;
+  margin: 24px 0 16px;
+}
+
+.auth-link-row {
+  text-align: center;
+}
+
+.auth-link {
+  color: #2C7176;
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 500;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+}
+
+.auth-error {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.auth-row {
+  display: flex;
+  gap: 16px;
+}
+
+.auth-row .auth-field {
+  flex: 1;
+}

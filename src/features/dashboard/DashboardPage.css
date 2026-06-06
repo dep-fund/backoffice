@@ -1,0 +1,241 @@
+:root {
+    --primary-orange: #f19204;
+    --dark-navy: #0d1b2a;
+    --text-main: #1a1a1a;
+    --text-muted: #667085;
+    --white: #ffffff;
+    --border: #e5e7eb;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* =========================
+     RESET
+  ========================= */
+  .dashboard-container * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  /* =========================
+     LAYOUT
+  ========================= */
+  .dashboard-container {
+    min-height: 100vh;
+    background: #f8fafc;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* =========================
+     HEADER
+  ========================= */
+  .dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  
+    padding: 14px 28px;
+    background: var(--dark-navy);
+    color: var(--white);
+  
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  /* BRAND */
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  
+  .header-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.2);
+  }
+  
+  .header-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: white;
+    letter-spacing: -0.5px;
+  }
+  
+  /* Color dinámico para "Fund" */
+  .header-title span {
+    color: var(--primary-orange);
+  }
+  
+  /* NAV */
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  
+  .nav-item {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+  
+    padding: 6px 10px;
+    border-radius: 6px;
+  
+    transition: 0.2s ease;
+  }
+  
+  .nav-item:hover {
+    color: white;
+    background: rgba(255,255,255,0.08);
+  }
+  
+  /* LOGOUT */
+  .logout-button {
+    background: linear-gradient(180deg, var(--primary-orange), #d98303);
+    border: none;
+    color: white;
+  
+    padding: 8px 14px;
+    border-radius: 8px;
+  
+    font-size: 0.85rem;
+    font-weight: 700;
+  
+    cursor: pointer;
+    transition: 0.2s ease;
+  }
+  
+  .logout-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(241, 146, 4, 0.3);
+  }
+  
+  /* =========================
+     MAIN CONTENT
+  ========================= */
+  .dashboard-content {
+    padding: 40px 28px;
+    flex: 1;
+  }
+  
+  /* =========================
+     WELCOME BANNER
+  ========================= */
+  .welcome-banner {
+    max-width: 1100px;
+    margin: 0 auto;
+  
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .welcome-text {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .welcome-text h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  
+  .welcome-text p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    max-width: 600px;
+  }
+
+  /* =========================
+     QUICK ACTIONS
+  ========================= */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+  }
+  
+  /* CARD */
+  .action-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  
+    padding: 18px;
+    text-decoration: none;
+  
+    box-shadow: var(--shadow);
+    transition: 0.2s ease;
+  
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .action-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-orange);
+  }
+  
+  /* efecto glow sutil */
+  .action-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at top left,
+      rgba(241, 146, 4, 0.12),
+      transparent 60%
+    );
+    opacity: 0;
+    transition: 0.3s ease;
+  }
+  
+  .action-card:hover::before {
+    opacity: 1;
+  }
+  
+  .action-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 8px;
+  }
+  
+  .action-card p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+  
+  /* =========================
+     RESPONSIVE
+  ========================= */
+  @media (max-width: 768px) {
+    .dashboard-header {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+  
+    .header-nav {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  
+    .welcome-text h1 {
+      font-size: 1.6rem;
+    }
+  }

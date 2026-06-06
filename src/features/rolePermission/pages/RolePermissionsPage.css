@@ -1,0 +1,165 @@
+.role-permissions-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.role-permissions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 28px;
+}
+
+.role-permissions-header span {
+  font-size: 15px;
+  color: #64748b;
+}
+
+.new-assignment-btn {
+  height: 46px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #ec8f41;
+  color: white;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 0 18px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.new-assignment-btn:hover {
+  opacity: 0.92;
+}
+
+.role-permissions-table-wrap {
+  background: white;
+
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+
+  overflow: hidden;
+}
+
+.role-permissions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.role-permissions-table th {
+  height: 60px;
+
+  padding: 0 20px;
+
+  text-align: left;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  color: #94a3b8;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.role-permissions-table td {
+  height: 74px;
+
+  padding: 0 20px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  color: #475569;
+
+  font-size: 15px;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  background: rgba(44, 113, 118, 0.12);
+  color: #2c7176;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.permission-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 8px 14px;
+
+  border-radius: 999px;
+
+  background: rgba(236, 143, 65, 0.14);
+  color: #ec8f41;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.assignment-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.delete-assignment-btn {
+  height: 38px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #dc2626;
+  color: white;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 14px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.delete-assignment-btn:hover {
+  background: #b91c1c;
+}
+
+.role-permissions-loading,
+.role-permissions-error,
+.empty-state {
+  padding: 20px;
+
+  font-size: 14px;
+}
+
+.role-permissions-loading,
+.empty-state {
+  color: #64748b;
+}
+
+.role-permissions-error {
+  color: #dc2626;
+}
