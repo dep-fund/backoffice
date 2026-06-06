@@ -54,6 +54,6 @@ jobs:
       - name: Upload to GCS
         working-directory: backoffice
         run: |
-          gsutil -m rsync -r -d dist/ gs://$BUCKET/
-          gsutil -m setmeta -h "Cache-Control:no-cache,no-store,must-revalidate" gs://$BUCKET/**/*.html
-          gsutil -m setmeta -h "Cache-Control:public,maxage=31536000" gs://$BUCKET/**/*.{js,css,png,jpg,svg,ico,woff2}
+          gsutil -m rsync -r -d dist/ gs://$BUCKET/admin/
+          gsutil -m setmeta -h "Cache-Control:no-cache,no-store,must-revalidate" gs://$BUCKET/admin/**/*.html
+          gsutil -m setmeta -h "Cache-Control:public,max-age=31536000" gs://$BUCKET/admin/**/*.{js,css,png,jpg,svg,ico,woff2}
