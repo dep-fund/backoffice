@@ -391,3 +391,136 @@
   color: #475569;
   line-height: 1.6;
 }
+
+.div-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.div-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.div-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+}
+
+.div-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.div-icon-wrap {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(44, 113, 118, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.div-header-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 2px;
+}
+
+.div-header-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.div-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6b7280;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.div-close:hover {
+  background: #f3f4f6;
+  color: #1a1a1a;
+}
+
+.div-body {
+  padding: 20px;
+}
+
+.div-feedback {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.83rem;
+}
+
+.div-feedback--error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.div-claim-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.div-claim-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.div-spinner--sm {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: div-spin 0.7s linear infinite;
+}
+
+@keyframes div-spin {
+  to { transform: rotate(360deg); }
+}

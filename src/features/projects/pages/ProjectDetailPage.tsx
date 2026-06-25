@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ArrowLeft, CheckCircle, XCircle, ChevronLeft, ChevronRight, FileText, Edit2, Save, X } from 'lucide-react';
+import { ArrowLeft, CheckCircle, XCircle, ChevronLeft, ChevronRight, FileText, Edit2, Save, X, AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useProjectDetail } from '../hooks/useProjectDetail';
 import {
@@ -15,6 +15,7 @@ import type { ProjectImage, ProjectDocument, ProjectAdvance } from '../services/
 import { useAuthContext } from '../../../shared/context/AuthContext';
 import VerdictModal from '../components/VerdictModal';
 import './ProjectDetailPage.css';
+import { distributeDividends } from '../services/projectsService';
 
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat('es-AR', {
@@ -54,6 +55,13 @@ const ProjectDetailPage = () => {
   const [advances, setAdvances] = useState<ProjectAdvance[]>([]);
   const [currentDoc, setCurrentDoc] = useState(0);
   const [currentAdv, setCurrentAdv] = useState(0);
+
+  const [showDistributeModal, setShowDistributeModal] = useState(false);
+  const [distributeAmount, setDistributeAmount] = useState('');
+  const [distributeConfirmText, setDistributeConfirmText] = useState('');
+  const [distributeLoading, setDistributeLoading] = useState(false);
+  const [distributeError, setDistributeError] = useState('');
+  const [distributeSuccess, setDistributeSuccess] = useState('');
 
   useEffect(() => {
     if (project) {
@@ -153,6 +161,23 @@ const ProjectDetailPage = () => {
     }
   };
 
+  const handleDistribute = async () => {
+    if (!token || !project) return;
+    try {
+      setDistributeLoading(true);
+      setDistributeError('');
+      await distributeDividends(token, project.id, parseFloat(distributeAmount));
+      setDistributeSuccess(`Se distribuyeron ${distributeAmount} USDC correctamente.`);
+      setShowDistributeModal(false);
+      setDistributeAmount('');
+      setDistributeConfirmText('');
+    } catch (err) {
+      setDistributeError(err instanceof Error ? err.message : 'Error al distribuir.');
+    } finally {
+      setDistributeLoading(false);
+    }
+  };
+
   return (
     <div>
       <Link to="/projects" className="project-back-link">
@@ -198,6 +223,7 @@ const ProjectDetailPage = () => {
 
         {actionSuccess && <div className="project-action-success">✓ {actionSuccess}</div>}
         {actionError && <div className="project-action-error">{actionError}</div>}
+        {distributeSuccess && <div className="project-action-success">✓ {distributeSuccess}</div>}
 
         {isPending && !isEditing && (
           <div className="project-verdict-bar">
@@ -212,6 +238,22 @@ const ProjectDetailPage = () => {
               onClick={() => { setActionSuccess(''); setActionError(''); setModalMode('reject'); }}
             >
               <XCircle size={16} /> Rechazar proyecto
+            </button>
+          </div>
+        )}
+
+        {project.state === 'APPROVED' && project.dividend_address && (
+          <div style={{ marginBottom: '24px' }}>
+            <button
+              className="verdict-btn-approve"
+              style={{ background: '#2C7176' }}
+              onClick={() => {
+                setDistributeError('');
+                setDistributeSuccess('');
+                setShowDistributeModal(true);
+              }}
+            >
+              <CheckCircle size={16} /> Distribuir Dividendos
             </button>
           </div>
         )}
@@ -439,6 +481,92 @@ const ProjectDetailPage = () => {
           onClose={() => setModalMode(null)}
           onConfirm={handleConfirm}
         />
+      )}
+
+      {showDistributeModal && (
+        <div className="div-overlay" onClick={() => setShowDistributeModal(false)}>
+          <div className="div-modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px' }}>
+
+            <div className="div-header">
+              <div className="div-header-left">
+                <div className="div-icon-wrap">
+                  <CheckCircle size={18} color="#2C7176" />
+                </div>
+                <div>
+                  <p className="div-header-label" style={{ color: '#2C7176' }}>Distribución</p>
+                  <h2 className="div-header-title">Distribuir Dividendos</h2>
+                </div>
+              </div>
+              <button className="div-close" onClick={() => setShowDistributeModal(false)}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="div-body" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '14px 16px', fontSize: '13px', color: '#166534', lineHeight: '1.5' }}>
+                El monto ingresado será transferido desde la cuenta de tesorería de la plataforma al contrato de dividendos y distribuido proporcionalmente entre todos los holders de tokens del proyecto.
+              </div>
+
+              <div>
+                <label style={{ fontSize: '13px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
+                  Monto a distribuir (USDC)
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  value={distributeAmount}
+                  onChange={(e) => setDistributeAmount(e.target.value)}
+                  style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '13px', fontWeight: 600, color: '#374151', display: 'block', marginBottom: '6px' }}>
+                  Escribí <strong>CONFIRMAR</strong> para continuar
+                </label>
+                <input
+                  type="text"
+                  placeholder="CONFIRMAR"
+                  value={distributeConfirmText}
+                  onChange={(e) => setDistributeConfirmText(e.target.value)}
+                  style={{ width: '100%', padding: '10px 12px', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '14px', boxSizing: 'border-box' }}
+                />
+              </div>
+
+              {distributeError && (
+                <div className="div-feedback div-feedback--error">
+                  <AlertCircle size={15} />
+                  {distributeError}
+                </div>
+              )}
+
+              <button
+                className="div-claim-btn"
+                style={{ background: '#2C7176' }}
+                disabled={
+                  !distributeAmount ||
+                  parseFloat(distributeAmount) <= 0 ||
+                  distributeConfirmText !== 'CONFIRMAR' ||
+                  distributeLoading
+                }
+                onClick={handleDistribute}
+              >
+                {distributeLoading ? (
+                  <>
+                    <div className="div-spinner div-spinner--sm" />
+                    Distribuyendo...
+                  </>
+                ) : (
+                  `Distribuir ${distributeAmount ? parseFloat(distributeAmount).toFixed(2) + ' USDC' : ''}`
+                )}
+              </button>
+
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

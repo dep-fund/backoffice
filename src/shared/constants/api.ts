@@ -17,6 +17,7 @@ export const ENDPOINTS = {
     APPROVE: (id: string) => `/admin/projects/${id}/approve`,
     REJECT: (id: string) => `/admin/projects/${id}/reject`,
     UPDATE: (id: string) => `/admin/projects/${id}/update`,
+    DISTRIBUTE: (id: string) => `/admin/dividends/${id}/distribute`,
   },
   CATEGORIES: {
     LIST: '/admin/categories',
