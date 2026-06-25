@@ -37,4 +37,5 @@ export interface ProjectResponse {
   roi: string | null;
   annual_benefits: string | null;
   suffix: string | null;
+  dividend_address: string | null;
 }

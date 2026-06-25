@@ -1,5 +1,5 @@
 import { apiClient } from '../../../shared/utils/apiClient';
-import { ENDPOINTS } from '../../../shared/constants/api';
+import { BASE_URL, ENDPOINTS } from '../../../shared/constants/api';
 
 import type {
   PaginatedResponse,
@@ -116,4 +116,24 @@ export const updateProject = async (
     },
     token,
   );
+};
+
+export const distributeDividends = async (
+  token: string,
+  projectId: string,
+  usdcAmount: number
+): Promise<void> => {
+  const response = await fetch(`${BASE_URL}${ENDPOINTS.PROJECTS.DISTRIBUTE(projectId)}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ usdc_amount: usdcAmount }),
+  });
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    throw new Error(data?.detail || 'Error al distribuir dividendos');
+  }
 };
