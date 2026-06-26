@@ -28,4 +28,7 @@ export const ENDPOINTS = {
   PERMISSIONS: {
     LIST: '/admin/permission',
   },
+  REPORTS: {
+    FUNDRAISING: '/admin/reports/fundraising',
+  },
 };

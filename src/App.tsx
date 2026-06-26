@@ -13,6 +13,7 @@ import ProfilePage from './features/profile/pages/ProfilePage';
 import RolesPage from './features/roles/pages/RolesPage';
 import PermissionsPage from './features/permissions/pages/PermissionsPage';
 import RolePermissionsPage from './features/rolePermission/pages/RolePermissionPage';
+import FundraisingReportPage from './features/reports/pages/FundraisingReportPage';
 import Layout from './shared/components/Layout/Layout';
 
 import { AuthProvider, useAuthContext } from './shared/context/AuthContext';
@@ -65,6 +66,7 @@ const AppRoutes = () => (
     <Route path="/role-permissions"element={<ProtectedRoute><Layout><RolePermissionsPage /></Layout></ProtectedRoute>}/>
     <Route path="*" element={<Navigate to="/dashboard" replace />} />
     <Route path="/permissions"element={<ProtectedRoute><Layout><PermissionsPage /></Layout></ProtectedRoute>}/>
+    <Route path="/reports/fundraising"element={<ProtectedRoute><Layout><FundraisingReportPage /></Layout></ProtectedRoute>}/>
   </Routes>
 );
 

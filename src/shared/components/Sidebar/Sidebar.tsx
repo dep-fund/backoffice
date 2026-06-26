@@ -8,6 +8,7 @@ import {
   KeyRound,
   UserCircle,
   LogOut,
+  BarChart3,
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';
@@ -21,6 +22,7 @@ const navItems = [
   { path: '/roles', label: 'Roles', icon: Shield },
   { path: '/permissions', label: 'Permisos', icon: Lock },
   { path: '/role-permissions', label: 'Roles y Permisos', icon: KeyRound },
+  { path: '/reports/fundraising', label: 'Reportes', icon: BarChart3 },
   { path: '/profile', label: 'Mi Perfil', icon: UserCircle },
 ];
 
