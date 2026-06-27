@@ -4,38 +4,13 @@ import { Link } from 'react-router-dom';
 import { useLogin } from '../hooks/useLogin';
 import './LoginPage.css';
 
-const validateIdentifier = (v: string) => {
-  if (!v.trim()) return 'El usuario o email es obligatorio';
-  return '';
-};
-
-const validatePassword = (v: string) => {
-  if (!v) return 'La contraseña es obligatoria';
-  if (v.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
-  return '';
-};
-
 const LoginPage = () => {
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<{ identifier?: string; password?: string }>({});
   const { handleLogin, loading, error } = useLogin();
-
-  const handleBlur = (field: 'identifier' | 'password') => {
-    const fn = field === 'identifier' ? validateIdentifier : validatePassword;
-    const val = field === 'identifier' ? identifier : password;
-    setErrors(prev => ({ ...prev, [field]: fn(val) }));
-  };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-
-    const idErr = validateIdentifier(identifier);
-    const pwErr = validatePassword(password);
-    setErrors({ identifier: idErr, password: pwErr });
-
-    if (idErr || pwErr) return;
-
     handleLogin(identifier, password);
   };
 
@@ -56,26 +31,24 @@ const LoginPage = () => {
           <div className="auth-field">
             <label className="auth-label">Usuario o Email</label>
             <input
-              className={`auth-input${errors.identifier ? ' input-error' : ''}`}
+              className="auth-input"
               type="text"
               placeholder="admin@depfund.com"
               value={identifier}
-              onChange={(e) => { setIdentifier(e.target.value); setErrors(prev => ({ ...prev, identifier: '' })); }}
-              onBlur={() => handleBlur('identifier')}
+              onChange={(e) => setIdentifier(e.target.value)}
+              required
             />
-            {errors.identifier && <span className="field-error">{errors.identifier}</span>}
           </div>
           <div className="auth-field">
             <label className="auth-label">Contraseña</label>
             <input
-              className={`auth-input${errors.password ? ' input-error' : ''}`}
+              className="auth-input"
               type="password"
               placeholder="••••••••"
               value={password}
-              onChange={(e) => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: '' })); }}
-              onBlur={() => handleBlur('password')}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
-            {errors.password && <span className="field-error">{errors.password}</span>}
           </div>
           <button className="auth-btn" type="submit" disabled={loading}>
             {loading ? 'Iniciando...' : 'Iniciar Sesión'}
