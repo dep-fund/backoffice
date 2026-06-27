@@ -48,15 +48,13 @@ const ProjectsPage = () => {
         <span className="projects-count">
           {total} proyectos encontrados
         </span>
-
         <div className="projects-search-wrap">
           <Search size={16} />
-
           <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
             className="projects-search-input"
             placeholder="Buscar..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
