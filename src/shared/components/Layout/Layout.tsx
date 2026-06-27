@@ -39,6 +39,10 @@ const PAGE_TITLES: Record<string, { title: string; subtitle: string }> = {
     title: 'Mi Perfil',
     subtitle: 'Información de la cuenta',
   },
+  '/reports/fundraising': {
+    title: 'Reportes',
+    subtitle: 'Informe de recaudación',
+  },
 };
 interface Props {
   children: ReactNode;
