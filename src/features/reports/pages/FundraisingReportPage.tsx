@@ -3,24 +3,23 @@ import {
   FolderKanban,
   Users,
   BarChart3,
+  ShoppingCart,
 } from 'lucide-react';
 import { useFundraisingReport } from '../hooks/useFundraisingReport';
 import '../../dashboard/pages/DashboardPage.css';
 import './FundraisingReportPage.css';
 
 const formatCurrency = (value: string | null | undefined) => {
-  if (!value) return '-';
+  if (value === null || value === undefined) return '-';
   const num = parseFloat(value);
   return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(num);
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(num) + ' USDC';
 };
 
 const formatNumber = (value: string | null | undefined) => {
-  if (!value) return '-';
+  if (value === null || value === undefined) return '-';
   if (parseFloat(value) >= 1_000_000) {
     return (parseFloat(value) / 1_000_000).toFixed(1) + 'M';
   }
@@ -70,9 +69,21 @@ const FundraisingReportPage = () => {
       <div className="dashboard-stats">
         <StatCard
           icon={<DollarSign size={22} color="#10B981" />}
-          value={formatCurrency(summary.total_raised)}
-          label="Total Recaudado"
+          value={formatCurrency(summary.total_revenue)}
+          label="Total Recaudación"
           iconBg="#ECFDF5"
+        />
+        <StatCard
+          icon={<BarChart3 size={22} color="#6366F1" />}
+          value={formatCurrency(summary.total_offering_fees)}
+          label="Comisión Offering (3%)"
+          iconBg="#EEF2FF"
+        />
+        <StatCard
+          icon={<ShoppingCart size={22} color="#F97316" />}
+          value={formatCurrency(summary.total_marketplace_fees)}
+          label="Comisión Marketplace (2%)"
+          iconBg="#FFF7ED"
         />
         <StatCard
           icon={<FolderKanban size={22} color="#6366F1" />}
@@ -85,12 +96,6 @@ const FundraisingReportPage = () => {
           value={summary.total_investors}
           label="Inversores"
           iconBg="#FEF2F2"
-        />
-        <StatCard
-          icon={<BarChart3 size={22} color="#F97316" />}
-          value={formatCurrency(summary.total_goal)}
-          label="Meta Total"
-          iconBg="#FFF7ED"
         />
       </div>
 
@@ -105,11 +110,12 @@ const FundraisingReportPage = () => {
               <tr>
                 <th>Proyecto</th>
                 <th>Estado</th>
-                <th>Meta (USDC)</th>
-                <th>Recaudado (USDC)</th>
-                <th>% Financiado</th>
-                <th>Soft Cap</th>
-                <th>Hard Cap</th>
+                <th>Meta</th>
+                <th>Recaudado</th>
+                <th>% Fin.</th>
+                <th>Caps</th>
+                <th>Fee Offering</th>
+                <th>Fee Marketplace</th>
                 <th>Inversores</th>
                 <th>Tokens</th>
               </tr>
@@ -126,21 +132,14 @@ const FundraisingReportPage = () => {
                     <td><span className={`report-state ${st.className}`}>{st.label}</span></td>
                     <td className="report-number">{formatCurrency(p.goal_amount)}</td>
                     <td className="report-number">{formatCurrency(p.raised_amount)}</td>
-                    <td>
-                      {pct !== '-' ? (
-                        <div className="report-pct-bar">
-                          <div
-                            className="report-pct-fill"
-                            style={{ width: `${Math.min(parseFloat(pct as string), 100)}%` }}
-                          />
-                          <span className="report-pct-text">{pct}%</span>
-                        </div>
-                      ) : (
-                        <span className="report-pct-text">-</span>
-                      )}
+                    <td className="report-number">{pct !== '-' ? `${pct}%` : '-'}</td>
+                    <td className="report-number caps">
+                      {p.soft_cap || p.hard_cap
+                        ? `${formatCurrency(p.soft_cap)} / ${formatCurrency(p.hard_cap)}`
+                        : '-'}
                     </td>
-                    <td className="report-number">{formatCurrency(p.soft_cap)}</td>
-                    <td className="report-number">{formatCurrency(p.hard_cap)}</td>
+                    <td className="report-number">{formatCurrency(p.offering_fees)}</td>
+                    <td className="report-number">{formatCurrency(p.marketplace_fees)}</td>
                     <td className="report-number">{p.investor_count}</td>
                     <td className="report-number">{formatNumber(p.tokens_sold)}</td>
                   </tr>
@@ -148,7 +147,7 @@ const FundraisingReportPage = () => {
               })}
               {projects.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="report-empty">No hay proyectos</td>
+                  <td colSpan={10} className="report-empty">No hay proyectos</td>
                 </tr>
               )}
             </tbody>

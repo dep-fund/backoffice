@@ -12,6 +12,8 @@ export interface ProjectFundraisingDetail {
   tokens_sold: string | null;
   total_supply: string | null;
   offering_address: string | null;
+  offering_fees: string | null;
+  marketplace_fees: string | null;
 }
 
 export interface FundraisingSummary {
@@ -21,6 +23,9 @@ export interface FundraisingSummary {
   total_investors: number;
   total_tokens_sold: string | null;
   total_investment_tx: number;
+  total_offering_fees: string | null;
+  total_marketplace_fees: string | null;
+  total_revenue: string | null;
 }
 
 export interface FundraisingReport {

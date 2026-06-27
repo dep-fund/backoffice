@@ -1,9 +1,36 @@
+.report-page .dashboard-stats {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.report-page .stat-label {
+  white-space: nowrap;
+}
+
+@media (max-width: 1400px) {
+  .report-page .dashboard-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .report-page .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .report-page .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
 .report-table-wrap {
   background: #FFFFFF;
   border-radius: 16px;
   padding: 28px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   margin-top: 30px;
+  overflow: hidden;
 }
 
 @media (max-width: 1400px) {
@@ -13,13 +40,7 @@
   .report-table tbody td,
   .report-table thead th {
     padding: 10px 12px;
-    font-size: 13px;
-  }
-  .report-pct-bar {
-    min-width: 80px;
-  }
-  .report-pct-fill {
-    height: 6px;
+    font-size: 12px;
   }
 }
 
@@ -27,18 +48,11 @@
   .report-table tbody td,
   .report-table thead th {
     padding: 8px 10px;
-    font-size: 12px;
+    font-size: 11px;
   }
   .report-table-wrap {
     padding: 16px;
     margin-top: 20px;
-  }
-  .report-pct-bar {
-    min-width: 70px;
-    gap: 6px;
-  }
-  .report-pct-text {
-    font-size: 11px;
   }
 }
 
@@ -65,12 +79,12 @@
 .report-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .report-table thead th {
   text-align: left;
-  padding: 12px 16px;
+  padding: 10px 12px;
   font-weight: 600;
   color: #64748B;
   border-bottom: 2px solid #F1F5F9;
@@ -78,7 +92,7 @@
 }
 
 .report-table tbody td {
-  padding: 14px 16px;
+  padding: 10px 12px;
   border-bottom: 1px solid #F1F5F9;
   color: #374151;
 }
@@ -99,6 +113,11 @@
 .report-number {
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+
+.report-number.caps {
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .report-state {
@@ -128,27 +147,6 @@
 .state-canceled {
   background: #F1F5F9;
   color: #64748B;
-}
-
-.report-pct-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 100px;
-}
-
-.report-pct-fill {
-  height: 8px;
-  background: #10B981;
-  border-radius: 4px;
-  transition: width 0.3s;
-  min-width: 4px;
-}
-
-.report-pct-text {
-  font-weight: 600;
-  color: #374151;
-  white-space: nowrap;
 }
 
 .report-empty {
