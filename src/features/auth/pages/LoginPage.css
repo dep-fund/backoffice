@@ -145,3 +145,19 @@
 .auth-row .auth-field {
   flex: 1;
 }
+
+.field-error {
+  display: block;
+  color: #DC2626;
+  font-size: 12px;
+  margin-top: 4px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.input-error {
+  border-color: #DC2626 !important;
+}
+
+.input-error:focus {
+  border-color: #DC2626 !important;
+}
