@@ -13,6 +13,7 @@ const RegisterPage = () => {
     email: '',
     password: '',
     image: '',
+    birthdate:''
   });
   const { handleRegister, loading, error } = useRegister();
 
@@ -116,6 +117,18 @@ const RegisterPage = () => {
               required
             />
           </div>
+          <div className="auth-field">
+          <label className="auth-label">Fecha de Nacimiento *</label>
+          <input
+            className="auth-input"
+            type="date"
+            name="birthdate"
+            value={form.birthdate}
+            onChange={onChange}
+            required
+          />
+        </div>
+          
           <div className="auth-field">
             <label className="auth-label">URL de Imagen (opcional)</label>
             <input
