@@ -5,6 +5,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { useFundraisingReport } from '../hooks/useFundraisingReport';
+import '../../dashboard/pages/DashboardPage.css';
 import './FundraisingReportPage.css';
 
 const formatCurrency = (value: string | null | undefined) => {
@@ -13,16 +14,38 @@ const formatCurrency = (value: string | null | undefined) => {
   return new Intl.NumberFormat('es-ES', {
     style: 'currency',
     currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(num);
 };
 
 const formatNumber = (value: string | null | undefined) => {
   if (!value) return '-';
-  const num = parseFloat(value);
-  return new Intl.NumberFormat('es-ES').format(num);
+  if (parseFloat(value) >= 1_000_000) {
+    return (parseFloat(value) / 1_000_000).toFixed(1) + 'M';
+  }
+  if (parseFloat(value) >= 1_000) {
+    return (parseFloat(value) / 1_000).toFixed(1) + 'K';
+  }
+  return new Intl.NumberFormat('es-ES').format(parseFloat(value));
 };
+
+interface StatCardProps {
+  icon: React.ReactNode;
+  value: string | number;
+  label: string;
+  iconBg: string;
+}
+
+const StatCard = ({ icon, value, label, iconBg }: StatCardProps) => (
+  <div className="stat-card">
+    <div className="stat-icon-wrap" style={{ background: iconBg }}>
+      {icon}
+    </div>
+    <div className="stat-value">{value}</div>
+    <div className="stat-label">{label}</div>
+  </div>
+);
 
 const stateLabel: Record<string, { label: string; className: string }> = {
   APPROVED: { label: 'Aprobado', className: 'state-approved' },
@@ -34,9 +57,9 @@ const stateLabel: Record<string, { label: string; className: string }> = {
 const FundraisingReportPage = () => {
   const { data, loading, error } = useFundraisingReport();
 
-  if (loading) return <div className="report-loading">Cargando reporte...</div>;
+  if (loading) return <div className="dash-loading">Cargando reporte...</div>;
 
-  if (error) return <div className="report-error">{error}</div>;
+  if (error) return <div className="dash-error">{error}</div>;
 
   if (!data) return null;
 
@@ -44,41 +67,38 @@ const FundraisingReportPage = () => {
 
   return (
     <div className="report-page">
-      {error && <div className="report-error">{error}</div>}
-
-      <div className="report-summary">
-        <div className="report-stat">
-          <div className="report-stat-icon" style={{ background: '#ECFDF5' }}>
-            <DollarSign size={22} color="#10B981" />
-          </div>
-          <div className="report-stat-value">{formatCurrency(summary.total_raised)}</div>
-          <div className="report-stat-label">Total Recaudado</div>
-        </div>
-        <div className="report-stat">
-          <div className="report-stat-icon" style={{ background: '#EEF2FF' }}>
-            <FolderKanban size={22} color="#6366F1" />
-          </div>
-          <div className="report-stat-value">{summary.total_projects}</div>
-          <div className="report-stat-label">Proyectos</div>
-        </div>
-        <div className="report-stat">
-          <div className="report-stat-icon" style={{ background: '#FEF2F2' }}>
-            <Users size={22} color="#EF4444" />
-          </div>
-          <div className="report-stat-value">{summary.total_investors}</div>
-          <div className="report-stat-label">Inversores</div>
-        </div>
-        <div className="report-stat">
-          <div className="report-stat-icon" style={{ background: '#FFF7ED' }}>
-            <BarChart3 size={22} color="#F97316" />
-          </div>
-          <div className="report-stat-value">{formatNumber(summary.total_goal)}</div>
-          <div className="report-stat-label">Meta Total (USDC)</div>
-        </div>
+      <div className="dashboard-stats">
+        <StatCard
+          icon={<DollarSign size={22} color="#10B981" />}
+          value={formatCurrency(summary.total_raised)}
+          label="Total Recaudado"
+          iconBg="#ECFDF5"
+        />
+        <StatCard
+          icon={<FolderKanban size={22} color="#6366F1" />}
+          value={summary.total_projects}
+          label="Proyectos"
+          iconBg="#EEF2FF"
+        />
+        <StatCard
+          icon={<Users size={22} color="#EF4444" />}
+          value={summary.total_investors}
+          label="Inversores"
+          iconBg="#FEF2F2"
+        />
+        <StatCard
+          icon={<BarChart3 size={22} color="#F97316" />}
+          value={formatCurrency(summary.total_goal)}
+          label="Meta Total"
+          iconBg="#FFF7ED"
+        />
       </div>
 
       <div className="report-table-wrap">
-        <h2 className="report-table-title">Detalle por Proyecto</h2>
+        <h2 className="dash-section-title">
+          <BarChart3 size={16} />
+          Detalle por Proyecto
+        </h2>
         <div className="report-table-scroll">
           <table className="report-table">
             <thead>
@@ -91,7 +111,7 @@ const FundraisingReportPage = () => {
                 <th>Soft Cap</th>
                 <th>Hard Cap</th>
                 <th>Inversores</th>
-                <th>Tokens Vendidos</th>
+                <th>Tokens</th>
               </tr>
             </thead>
             <tbody>
